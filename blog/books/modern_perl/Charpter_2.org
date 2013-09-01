@@ -18,26 +18,26 @@ CPAN 提供了各种程序库, 从数据库接入到性能测量,再到几乎每
 
 目前来说,没有CPAN的Perl仅仅是一门语言,而有了CPAN的Perl则变得强大无比, 今人惊叹.
 
-CPAN 会镜像那些可重用的Perl代码库的发行版(Distrubution), 一个发行版会包含一个或多个Perl 模块, 每个发行版都有其自己的CPAN命名空间及唯一的元数据.
+CPAN 会镜像那些可重用的Perl代码库的发行包(Distrubution), 一个发行包会包含一个或多个Perl 模块, 每个发行包都有其自己的CPAN命名空间及唯一的元数据.
 
-CPAN 自身仅仅是一个镜像服务. 作者上传发行版后, CPAN会把他们加入各个镜像站点, 这样一来Perl 用户就可以通过CPAN客户端来进行下载,配置,构建,测试以及安装.
+CPAN 自身仅仅是一个镜像服务. 作者上传发行包后, CPAN会把他们加入各个镜像站点, 这样一来Perl 用户就可以通过CPAN客户端来进行下载,配置,构建,测试以及安装.
 
-CPAN 之所以成功就在于它的简便以及有成千上万的志愿者愿意为他实现各种代码库的发行版, 特别是, CPAN社区有一系列标准来帮助识别那些合符规范的CPAN发行版的属性以及特性,这些包括:
+CPAN 之所以成功就在于它的简便以及有成千上万的志愿者愿意为他实现各种代码库的发行包, 特别是, CPAN社区有一系列标准来帮助识别那些合符规范的CPAN发行包的属性以及特性,这些包括:
 
   - CPAN 安装器(Installer) 的标准
-  - 元数据(用于描述每个发行版) 的标准
+  - 元数据(用于描述每个发行包) 的标准
   - 文档和许可证标准
 
-此外, CPAN 还提供完整的自动化测试以保证在该发行版在各种平台和各种Perl版本下的正确性, 每个CPAN发行版在http://rt.cpan.org 上都有其自己的Ticket队列用来报告Bugs.
-CPAN 还会链接到前一个发行版, 模块评分,文档等等, 所有这些都可以 http://search.cpan.org 找到.
+此外, CPAN 还提供完整的自动化测试以保证在该发行包在各种平台和各种Perl版本下的正确性, 每个CPAN发行包在http://rt.cpan.org 上都有其自己的Ticket队列用来报告Bugs.
+CPAN 还会链接到前一个发行包, 模块评分,文档等等, 所有这些都可以 http://search.cpan.org 找到.
 
-目前的Perl安装会包含两个客户端用于连接,搜索,下载,构建,测试以及安装CPAN发行版. 它们是CPAN.pm 和CPANPLUS. 基本上它们的的功能没有太多的差异.
-本书推荐使用CPAN.pm (以避免二义性) , 其最新版本(在当前包括了超过19800个稳定的发行版), 基于CPAN.pm, 模块安装其实非常容易.
+目前的Perl安装会包含两个客户端用于连接,搜索,下载,构建,测试以及安装CPAN发行包. 它们是CPAN.pm 和CPANPLUS. 基本上它们的的功能没有太多的差异.
+本书推荐使用CPAN.pm (以避免二义性) , 其最新版本(在当前包括了超过19800个稳定的发行包), 基于CPAN.pm, 模块安装其实非常容易.
 
     - 启动CPAN 客户端
       $ cpan
 
-    - 通过CPAN安装发行版
+    - 通过CPAN安装发行包
       $ cpan
       cpan[1] > instqall Modern::Perl
 
@@ -47,7 +47,7 @@ CPAN 还会链接到前一个发行版, 模块评分,文档等等, 所有这些�
 
 Eric Whilheml 关于如何配置CPAN.pm的教程包含了很好的章节来介绍如何处理在配置中遇到的各种问题.
 
-尽管CPAN客户端是作为Perl 5发行版的核心组件,但是你可以还需要额外安装一些标准的开发工具,例如make和C语言编译器.
+尽管CPAN客户端是作为Perl 5发行包的核心组件,但是你可以还需要额外安装一些标准的开发工具,例如make和C语言编译器.
 Windows用户,可以参考 Strawberry Perl (http://strawberryperl.com ).
 Mac OS X用户必须安装XCode. 
 Unix或者类Unix用户通常已经安装了这些工具(如果没有的话, Debian及Ubuntu用户可以安装 build-essential).
@@ -55,7 +55,7 @@ Unix或者类Unix用户通常已经安装了这些工具(如果没有的话, Deb
 
 * CPAN 管理工具
 
-如果你的操作系统已经为你预装了Perl 5, 这个版本可以会有些过时,或者它会依赖于某个特定的CPAN发行版(而不是最新的).
+如果你的操作系统已经为你预装了Perl 5, 这个版本可以会有些过时,或者它会依赖于某个特定的CPAN发行包(而不是最新的).
 许多Perl开发者往往会构建自己的虚拟墙来防止预装的Perl与他们自己安装的Perl之间发生相互干扰.
 以下几个项目可以用于帮助构建这种虚拟墙.
 
@@ -72,8 +72,8 @@ App::perbrew 是一个用于管理并切换多个Perl版本及配置的系统. �
    $ perldoc App::perlbrew
    
 
-Local::lib CPAN 发行版允许你在自已的用户目录里安装及管理发行版, 而不是把它们安装到系统里作为全局配置, 这是一个安装维护自己的CPAN发行版而不会影响其它用户的好办法.
-有时甚至会遇到系统里存在超过两个Perl发行版的情况, 然而App::local::lib::helper可以很好的帮助你简化配置过程, 请参看 http://search.cpan.org/~jjnapiork/App-local-lib-helper-0.07/lib/App/local/lib/helper.pm 以了解详情.
+Local::lib CPAN 发行包允许你在自已的用户目录里安装及管理发行包, 而不是把它们安装到系统里作为全局配置, 这是一个安装维护自己的CPAN发行包而不会影响其它用户的好办法.
+有时甚至会遇到系统里存在超过两个Perl发行包的情况, 然而App::local::lib::helper可以很好的帮助你简化配置过程, 请参看 http://search.cpan.org/~jjnapiork/App-local-lib-helper-0.07/lib/App/local/lib/helper.pm 以了解详情.
 
 以上三个项目都假定你在使用一个类Unix的环境(例如GNU/Linux, 或者 Mac OS X).
 对于Windows用户，请参看Padre all-in-one下载（ http://padre.perlde.org/download.html).
@@ -102,14 +102,14 @@ Perl Weekly (http://perlweekly.com) 则会在每周都发布一份关于整个Pe
 
 * 开发站点
 
-Best Practical Solutions( http://bestpractical.com) 维护着一个很流行的需求跟踪系统，RT, CPAN的作者以及Perl 5和Perl 6的核心开发都在使用它．
+Best Practical Solutions( http://bestpractical.com) 维护着一个很流行的Bug跟踪系统，RT, CPAN的作者以及Perl 5和Perl 6的核心开发都在使用它．
 每一个CPAN发行包都有一个他自己的RT queue，　相关链接都可以在search.cpan.org和http://rt.cpan.org 上找到．　Perl 5和Perl 6 有它们自己分别的RT queques,请参看http://rt.perl.org .
 
 Perl 5 Porter(或者 p5p) 邮件列表是Perl5自身开发的很重要一个地方，请参看 http://list.cpan.org/showlist.cgi?name=perl5-porters .
 
 Perl Foundation (http://perlfoundation.org) 维护了一个关于Perl 5所有东西的WIKI，请参看http://perlfoundation.org/perl5 .
 
-许多Perl黑客使用Github(http://github.com)来维护他们自己的项目．特别是　Gitpan( http://github.com/gitpan ) 维护着一个GIT代码库，它记录了每个CPAN发行版全部的历史．
+许多Perl黑客使用Github(http://github.com)来维护他们自己的项目．特别是　Gitpan( http://github.com/gitpan ) 维护着一个GIT代码库，它记录了每个CPAN发行包全部的历史．
 
 
 * Perl 大事
