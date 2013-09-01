@@ -1,0 +1,54 @@
+#+BLOG: wordpress
+#+POSTID: 37
+#+DATE: [2013-08-31 Sat 22:18]
+#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil TeX:nil
+#+CATEGORY: org2blog, emacs
+#+TAGS:
+#+DESCRIPTION:
+#+TITLE: My Blog evolution history
+
+* Phase 1
+
+2006/02 to 2008/12 
+
+I began to use blog in 2006, at that time, I was in Chongqing Univistiy. I applied a account in Yesky (a Chongqing local site),  and kept writing blog there for more than 2 years. Until someday, this website paused its blog service.
+About 2 monthes later, it restored, but I found all contents were gone, then I had to decid to give up this blog :(.
+
+
+* Phase 2
+
+2009/01 to 2013/08 
+
+In this phase, I did't use any public blog, because I don't want Yesky touble happend again. I used something else to record those important info/knowledges in my mind.
+  - Google notes
+  - Evernote 
+  - Git + Emacs Muse + Mongoose ( Mongoose is a lightweight web server, Muse is a authoring and publishing environment for Emacs )
+
+I like this way "Git + Emacs Muse + Mongoose". there are something valuable : 
+  - Easy to write, good format.
+  - Fully ownership
+  - version control
+
+Just 2 things not very good :
+  - It cannot be a publc site, so I cannot access it from everywhere, especailly from my moble.
+  - Cannot support comments.
+
+
+* Phase 3
+
+2013/09 
+
+Yeah, finally, I find this perfect solution, Github + Emacs Org + Wordpress.
+
+With this solution, I get all the thing I require :)
+
+  - Fully ownership ( GITHUB with local GIT )
+  - Version control
+  - Easy to write , good foramt 
+  - Easy to publish
+  - Support comments
+  
+
+
+
+
