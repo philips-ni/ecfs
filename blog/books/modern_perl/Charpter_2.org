@@ -44,3 +44,88 @@ CPAN 还会链接到前一个发行版, 模块评分,文档等等, 所有这些�
 以上两步也可以合而为一
 
       $ capn Modern::Perl
+
+Eric Whilheml 关于如何配置CPAN.pm的教程包含了很好的章节来介绍如何处理在配置中遇到的各种问题.
+
+尽管CPAN客户端是作为Perl 5发行版的核心组件,但是你可以还需要额外安装一些标准的开发工具,例如make和C语言编译器.
+Windows用户,可以参考 Strawberry Perl (http://strawberryperl.com ).
+Mac OS X用户必须安装XCode. 
+Unix或者类Unix用户通常已经安装了这些工具(如果没有的话, Debian及Ubuntu用户可以安装 build-essential).
+
+
+* CPAN 管理工具
+
+如果你的操作系统已经为你预装了Perl 5, 这个版本可以会有些过时,或者它会依赖于某个特定的CPAN发行版(而不是最新的).
+许多Perl开发者往往会构建自己的虚拟墙来防止预装的Perl与他们自己安装的Perl之间发生相互干扰.
+以下几个项目可以用于帮助构建这种虚拟墙.
+
+App::Cpanminus 是一个相对较新的CPAN客户端, 它的设计目的是: 更快的速度,更简便以及零配置,可以这样安装它:
+    - cpan App::cpanminus  或者
+    - $ curl -LO http://xrl.us/cpanm
+      $ chmod +x cpanm
+
+App::perbrew 是一个用于管理并切换多个Perl版本及配置的系统. 安装它也非常容易.
+
+   $ cul -LO http://xrl.us/perlbrew
+   $ chmod +x perlbrew
+   $ ./perlbrew install 
+   $ perldoc App::perlbrew
+   
+
+Local::lib CPAN 发行版允许你在自已的用户目录里安装及管理发行版, 而不是把它们安装到系统里作为全局配置, 这是一个安装维护自己的CPAN发行版而不会影响其它用户的好办法.
+有时甚至会遇到系统里存在超过两个Perl发行版的情况, 然而App::local::lib::helper可以很好的帮助你简化配置过程, 请参看 http://search.cpan.org/~jjnapiork/App-local-lib-helper-0.07/lib/App/local/lib/helper.pm 以了解详情.
+
+以上三个项目都假定你在使用一个类Unix的环境(例如GNU/Linux, 或者 Mac OS X).
+对于Windows用户，请参看Padre all-in-one下载（ http://padre.perlde.org/download.html).
+
+
+
+* 社区网站
+
+Perl社区的主页在 http://www.perl.org, 这里面包括了Perl的文档，源码，教程，邮件列表，以及几个重要的社区项目．如果你是Perl新手，Perl Beginners邮件列表是一个非常友好的地方，你可以在这里问一些很基本的问题，并得到准确的非常有帮助的回答，请参看http://learn.perl.org/faq/beginners.html.
+
+Perl开发社区的主页在http://dev.perl.org, 这里面包括了许多与Perl5及Perl6核心开发相关的资源．
+
+Perl.com 会刊登关于Perl及其文化的一些文章及教程，　这里面甚至会包括一些20世纪时的一些文章，请参看 http://www.perl.com.
+
+CPAN 的主面在 http://www.cpan.org, 然后有经验的用户往往花更多的时候在 http://search.cpan.org. 这是整个Perl社区免费的可用的Perl代码的集散地, MetaCPAN( https://metacpan.org) 是一个最近的CPAN的前端．
+
+PerlMonks( http://perlmonks.org ) 是一个致力于Perl编程讨论的社区网站．它这十一年的不断发展，使它成为受人尊敬的编程语言的问答网站（不仅仅是局限在Perl）．
+
+另外几个社区提供了一些关于Perl的新闻及评论．http://blogs.perl.org 是一个blog平台，它免费开放给所有的Perl社区成员．
+
+还有一些站点，汇集了许多Perl黑客的思考, 比如http://perlsphere.net, http://plant.perl.org 以及 http://ironman.enlightendedperl.org. 最后那个网站是 Enlightend Perl Organization( http://enligenedperl.org)的一部分，它的目的是用来增加网络上Perl文档资料的数量，并改善其质量．
+
+Perl Buzz (http://perlbuzz.com)会定期收集和刊发一些非常有趣或非常有用的Perl新闻．
+
+Perl Weekly (http://perlweekly.com) 则会在每周都发布一份关于整个Perl世界的新闻．
+
+* 开发站点
+
+Best Practical Solutions( http://bestpractical.com) 维护着一个很流行的需求跟踪系统，RT, CPAN的作者以及Perl 5和Perl 6的核心开发都在使用它．
+每一个CPAN发行包都有一个他自己的RT queue，　相关链接都可以在search.cpan.org和http://rt.cpan.org 上找到．　Perl 5和Perl 6 有它们自己分别的RT queques,请参看http://rt.perl.org .
+
+Perl 5 Porter(或者 p5p) 邮件列表是Perl5自身开发的很重要一个地方，请参看 http://list.cpan.org/showlist.cgi?name=perl5-porters .
+
+Perl Foundation (http://perlfoundation.org) 维护了一个关于Perl 5所有东西的WIKI，请参看http://perlfoundation.org/perl5 .
+
+许多Perl黑客使用Github(http://github.com)来维护他们自己的项目．特别是　Gitpan( http://github.com/gitpan ) 维护着一个GIT代码库，它记录了每个CPAN发行版全部的历史．
+
+
+* Perl 大事
+
+Perl社区一直都开展着许许多多，大大小小，各种各样的会议．特别是YAPC (Yet Another Perl Conference), 这是一个成功的，基于本地的，低成本的会议模型，它在各大州都有举办．
+请参看 http://yapc.org.
+
+在Perl Foundation Wiki列表上列出了许多其它的Perl大事 ,请参看 http://perlfoundation.org/perl5/index.cgi?perl_events.
+
+在 http://pm.org  上列出了许多地方本地的Perl爱好者组织的技术讨论和技术会议．
+
+
+* IRC
+
+当Perl爱好者不能见面的时候，许多协作以及在线讨论都会通过IRC来进行．
+许多流行的Perl项目都有它们自己的IRC频道, 例如 #moose　和　＃catalyst.
+Perl社区的主要服务器是 irc://irc.perl.org. 值得注意的频道还包括 #perl-help, 它主要用于普通的关于Perl编程方面的帮助．
+还有　#perl-qa, 它主要致力于一些测试和其它质量相关的问题．
+另外，#perl频道是一个通用的频道，在它上面你可以讨论任何你想要讨论的问题．
