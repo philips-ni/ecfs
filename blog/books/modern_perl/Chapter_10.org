@@ -58,7 +58,74 @@ Perl 5的对象系统（Moose),把方法的调用者(invocant)当作一个默认
 
 *** Schewartizian 变换
 
+用 Schewartizian　变换作为例子可以很好的展示Perl从Lisp那里借鉴到的对列表处理的习惯用法．
+
+假设你有一个Perl Hash，它关系着你的合作者以及他们的电话分机号：
+
+#+begin_src perl
+	my %extensions =
+	(
+	    '001' => 'Armon',
+	    '002' => 'Wesley',
+	    '003' => 'Gerald',
+	    '005' => 'Rudy',
+	    '007' => 'Brandon',
+	    '008' => 'Patrick',
+	    '011' => 'Luke',
+	    '012' => 'Lamarcus',
+	    '017' => 'Chris',
+	    '020' => 'Maurice',
+	    '023' => 'Marcus',
+	    '024' => 'Andre',
+	    '052' => 'Greg',
+	    '088' => 'Nic',
+	);
+#+end_src
+
+先对名字按字母序排序：
+
+#+begin_src perl
+	my @sorted_names = sort values %extensions;
+#+end_src	    
+
+对于 Schewartizian变换而言，还需要维护名字及分机号的关系．
+
+#+begin_src perl
+	my @pairs = map { [ $_, $extensions{$_} ] } keys %extensions;
+#+end_src
+
+最后再把他们用名字排序
+
+#+begin_src perl
+	my @sort_pairs = sort { $a->[1] cmp $b->[1] } @pairs;
+#+end_src
+
+在sort 代码块里出现的$a和$b看上去有些奇怪，其实他们是两个包变量．它们分别代表每次从@pairs取出的相邻的两个元素.
+
+我们可以把@short_paris转换成一个更可读的形式：
+
+#+begin_src perl
+	my @formatted_exts = map { "$_->[1], ext. $_->[0]" } @sort_pairs;
+#+end_src
+
+这样你就可以把所有的信息输出了:
+
+#+begin_src perl
+	say for @formatted_exts;
+#+end_src
+
+让我们整理一下，把所有的动作合并到一起，这样我们就可以这样来实现Schwartzian变换：
+
+#+begin_src perl
+	say for
+	   map { " $_[1], ext. $_[0]" }
+	   sort { $a->[1] cmp $b->[1] }
+	   map { [ $_ => $extensions{$_} ]  }
+	kyes %extensions;
+#+end_src
+    
 *** 读取文件所有内容到一个标量
+
 
 *** 使用Main函数
 
