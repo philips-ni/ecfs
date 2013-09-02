@@ -9,6 +9,7 @@ Larry希望人们可以很容易地创建及维护他们自己的扩展, 同时�
 
 通过Perl社区, 利用那些无数其它优秀Perl程序员的知识和经验, 这会让你更快的成为一个更好的程序员.
 
+
 * The CPAN
 
 Perl 5本身是一门实用主义的语言, 然而更实用主义的Perl社区已经扩展了这门语言,并让他们的工作可以很方便地为外界所用. 如果你有一个问题想要得到解决, 很大的可能是别人已经写好了代码并共享出来.
@@ -99,6 +100,7 @@ PerlMonks( http://perlmonks.org ) 是一个致力于Perl编程讨论的社区网
 Perl Buzz (http://perlbuzz.com)会定期收集和刊发一些非常有趣或非常有用的Perl新闻．
 
 Perl Weekly (http://perlweekly.com) 则会在每周都发布一份关于整个Perl世界的新闻．
+
 
 * 开发站点
 

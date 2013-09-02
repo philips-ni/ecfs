@@ -1,0 +1,68 @@
+超越语法
+
+之前的章节仅仅是介绍了一些基本的Perl知识，这显然是不够的．有经验的Perl程序员往往会很自如地将Perl的各种特性组合在一起，并使用一些模式和习惯用法．
+
+好了，现在到了学习Perl的第二个阶段: 像Perl原住民（Perlish) 一样思考．这样会使你写的Perl代码更精炼，强大以及更Perlish :)
+
+* 习惯用法(Idioms)
+
+每一门语言，不管是编程语言或者是自然语言都有一些习惯的表达方式和用法.　例如地球在旋转，而我们却称之为日出或日落．
+
+We brag about clever hacks and cringe at nasty hacks as we sling code.
+
+Perl的习惯用法并不是语言的特性或者设计技巧．他们其实是一种机制和写代码的方式，这样写会让你看起来更有Perlish的腔调．
+
+你当然可以不这样使用，但是在很多地方他们表现了Perl的强大．
+
+** 用$self代表对象实例
+
+Perl 5的对象系统（Moose),把方法的调用者(invocant)当作一个默认的参数．无论你是调用一个类方法或者实例方法，@_的第一个元素总是这个方法的调用者.
+
+习惯上，大多数Perl 5代码都使用$class来表达类方法调用者，而用$self表示实例方法的调用者．
+
+这种习惯的强大之处在于，许多像MooseX::Method::Signatur这样的有用的扩展会假设你会使用$self作为实例方法的调用者．
+
+
+** 命名参数
+
+列表处理是Perl执行表达式的基本组件，而Perl允许使用变长参数列表则给程序员带来了许多方便．
+然而不仅仅是这样，Perl还允许程序员把参数成对的传入，换言之，Perl支持这样形式的命令参数及函数调用：
+
+#+begin_src perl
+    make_ice_cream_sundae(
+	whipped_cream => 1,
+	sprinkles => 1,
+	bannana => 1,
+	ice_cream => 'mint chocolate chip',
+    );
+#+end_src
+让我们来看如何实现这样的支持命令参数的函数：
+
+#+begin_src perl
+    sub make_ice_cream_sundae
+    {
+	my %args = @_;
+	my $dessert = get_ice_cream( $args{ice_cream} );
+	.....
+    }
+#+end_src
+这种技术在可以在定义import()的时候使用，这样你就可以处理按Hash的方式的处理任意多的参数了．请看：
+#+begin_src perl
+　　sub import
+    {
+	my ($class, %args) = @_;
+	my $calling_package = caller();
+	....
+    }
+#+end_src
+
+** Schewartizian 变换
+
+** 读取文件所有内容到一个标量
+
+** 使用Main函数
+
+** 可控的对Perl模块的执行
+
+* 全局变量
+
