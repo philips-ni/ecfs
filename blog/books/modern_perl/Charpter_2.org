@@ -103,11 +103,11 @@ PerlMonks( http://perlmonks.org ) 是一个致力于Perl编程讨论的社区网
 
 另外几个社区提供了一些关于Perl的新闻及评论．http://blogs.perl.org 是一个blog平台，它免费开放给所有的Perl社区成员．
 
-还有一些站点，汇集了许多Perl黑客的思考, 比如http://perlsphere.net, http://plant.perl.org 以及 http://ironman.enlightendedperl.org. 最后那个网站是 Enlightend Perl Organization( http://enligenedperl.org)的一部分，它的目的是用来增加网络上Perl文档资料的数量，并改善其质量．
+还有一些站点，汇集了许多Perl黑客的思考, 比如 http://perlsphere.net , http://plant.perl.org 以及 http://ironman.enlightendedperl.org . 最后那个网站是 Enlightend Perl Organization( http://enligenedperl.org )的一部分，它的目的是用来增加网络上Perl文档资料的数量，并改善其质量．
 
-Perl Buzz (http://perlbuzz.com)会定期收集和刊发一些非常有趣或非常有用的Perl新闻．
+Perl Buzz ( http://perlbuzz.com )会定期收集和刊发一些非常有趣或非常有用的Perl新闻．
 
-Perl Weekly (http://perlweekly.com) 则会在每周都发布一份关于整个Perl世界的新闻．
+Perl Weekly ( http://perlweekly.com ) 则会在每周都发布一份关于整个Perl世界的新闻．
 
 
 ** 开发站点
@@ -117,9 +117,9 @@ Best Practical Solutions( http://bestpractical.com) 维护着一个很流行的B
 
 Perl 5 Porter(或者 p5p) 邮件列表是Perl5自身开发的很重要一个地方，请参看 http://list.cpan.org/showlist.cgi?name=perl5-porters .
 
-Perl Foundation (http://perlfoundation.org) 维护了一个关于Perl 5所有东西的WIKI，请参看http://perlfoundation.org/perl5 .
+Perl Foundation ( http://perlfoundation.org ) 维护了一个关于Perl 5所有东西的WIKI，请参看http://perlfoundation.org/perl5 .
 
-许多Perl黑客使用Github(http://github.com)来维护他们自己的项目．特别是　Gitpan( http://github.com/gitpan ) 维护着一个GIT代码库，它记录了每个CPAN发行包全部的历史．
+许多Perl黑客使用Github(http://github.com) 来维护他们自己的项目．特别是　Gitpan( http://github.com/gitpan ) 维护着一个GIT代码库，它记录了每个CPAN发行包全部的历史．
 
 
 ** Perl 大事
