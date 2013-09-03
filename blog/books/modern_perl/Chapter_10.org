@@ -194,6 +194,114 @@ exit main()　unless caller(0);
 如果是直接执行该程序（perl path/to/Module.pm) ，caller(0)会返回０，如果是在程序中加载这个模块(use Module)，则caller(0)返回１．
 
 
+*** 后缀式(Postfix)参数验证
+
+CPAN 上有好些模块可以用来帮助进行函数参数的验证, 其中较好的两个是Params::Validate和MooseX::Params::Validate．
+基本上, 对于一些简单的参数验证甚至都不需要使用这些模块．
+
+假设你的函数有两个参数, 你可以这样来进行验证:
+
+#+begin_src perl
+	use Carp 'croak'
+	sub groom_monkeys
+	{
+	    if ( @_ != 2 ) {
+		croak 'Grooming requires two monkeys!';
+	    }
+	    ...
+	}
+#+end_src
+
+从语言学层面来说,结果比检查更重要，所以这样写会显得重点更突出．
+
+#+begin_src perl
+	    croak 'Grooming requires two monkeys!'　if @_ != 2;
+#+end_src
+
+或者这样写，可读性更强：
+
+#+begin_src perl
+	    croak 'Grooming requires two monkeys!'　unless @_ == 2;
+#+end_src
+
+使用这种尽早返回的技巧，特别是这种后缀式单行条件语句来进行参数验证, 可以使剩下的代码更加清晰和简捷．
+
+	
+*** Regex En Passant
+
+许多Perl习惯用法都依赖于对表达式进行求值，例如：
+
+#+begin_src perl
+	    say my $ext_num = my $extension = 42;
+#+end_src
+
+上述代码并不是一个好例子，只是要用它来表明一个表达式的值可以被用到别一个表达式里．这并不是什么新东西, 以下这两个用法我相信你之前一定用过：
+　　- 在列表里使用函数的返回值　（　my @array = ( 1, sum(1,2) ); )
+　　- 把一个函数的返回值作为别一个函数的参数 ( sum(1,max(1,3); )
+
+假设你想从姓名里把'名'提取出来，你可以这样：
+
+#+begin_src perl
+    my ( $first_name ) = $name =~ /($first_name_rx)/;
+#+end_src
+
+
+在列表上下文里，一次成功的正则匹配会返回一个列表，列表里面会包括所有捕获到的匹配．
+
+如果要修改这个名字，例如移除掉所有的非字母字符，可以这样：
+
+#+begin_src perl
+　　my $name = "philips_ni";
+    ( my $normalized_name = $name ) =~ tr/A-Za-z//dc;
+#+end_src
+
+首先把$name赋值给$normalized_name,(因为括号的优先级比'=~'高),　然后再对 $normalized_name　进行'tr'操作.
+    - 'c'指使用SET1(/A-Za-z/)的补充形式，即不匹配/A-Za-Z/的一切字符．
+　　- 'd' 指删除匹配SET1的字符
+　　- 这样tr操作就会把所有不匹配/A-Za-Z/的字符全部删掉．
+　  - 最后 $name的值仍是"philips_ni", 而 $normalized_name会值则变为"philipsni"
+
+这种技巧也可以用到别的支持即时修改(in-place modification)的操作符:
+
+#+begin_src perl
+my $age = 14;
+(my $next_age = $age)++;
+say "Next year I will be $next_age";
+#+end_src
+
+
+*** 强制转型(Unary Coercions)
+
+在你选择了正确的操作符的时候,　Perl5的自动型别系统基本上总是能够很好的识别和处理需要操作的数据.　
+在使用'.'(字符串连接符)的时候，Perl会自动地把两边的数据按字符串处理．
+在使用'+'时，Perl会自动地把两边的数据按数字处理．
+
+但有时，你可能不得不对你的数据进行强制转型，这样可以告诉Perl按你希望的方式来对数据进行处理．
+
+为了确保Perl把一个值当成一个数字，可以做'加零'操作.
+
+#+begin_src perl
+my $numberic_value = 0 + $value;
+#+end_src
+为了确保Perl把一个值当成布尔量，可以做'双重否定'操作．
+
+#+begin_src perl
+my $boolean_value = !! $value;
+#+end_src
+为了确保Perl把一个值当成字符串，可以做'连接到空串'操作．
+
+#+begin_src perl
+my $string_value = '' . $value;
+#+end_src
+
+基本上需要用到强制转型的地方很少，但是当你看到上述用法，你应该知道这些习惯用法意味着什么．
+例如，当你看到一些像这样的代码的时候：　
+#+begin_src perl
+　'userless' + 0；
+#+end_src
+
+在你移除他们之前，请仔细思考一下，移除他们会不会让整个代码不能运行．
+
 
 ** 全局变量
 
