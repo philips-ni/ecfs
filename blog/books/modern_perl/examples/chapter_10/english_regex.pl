@@ -7,7 +7,7 @@ use english '-no_match_vars';
 
 my $str = "I love you";
 
-if ($str =~ /love/p) {
+if ($str =~ /(love)/p) {
     print "\$` : $`\n";
     print "\$& : $&\n";
     print "\$' : $'\n";

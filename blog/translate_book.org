@@ -1,0 +1,32 @@
+#+BLOG: wordpress
+#+POSTID: 41
+#+DATE: [2013-09-03 Tue 08:02]
+#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil TeX:nil
+#+CATEGORY: perl
+#+TAGS:
+#+DESCRIPTION:
+#+TITLE: Begin to translate "Modern Perl"
+
+* Introduction
+
+I'm a Perl programmer, I use Perl everyday.
+I thought I already know much about Perl until I find the free book *Moderl Perl* (http://modernperlbooks.com/).
+I learn a lot from this book and I get a idea to translate it to Chinese, I have 3 purposes:
+  - Translating can help me undertand those content better.
+  - It may help those Chinese Perl programmer who may prefere Chinese book.
+  - It would be a good start for my playing with Github.
+
+
+* The plan and repository 
+
+I'm planing to translate at least one chapter for each week.
+
+I'm using https://github.com/philips-ni/ecfs/tree/master/blog/books/modern_perl to maintain my translation progress.
+
+Right now, almost 2 chapters are finished.
+  - https://github.com/philips-ni/ecfs/blob/master/blog/books/modern_perl/Chapter_2.org
+  - https://github.com/philips-ni/ecfs/blob/master/blog/books/modern_perl/Chapter_10.org 
+
+* Reference
+  - http://modernperlbooks.com/books/modern_perl/
+
