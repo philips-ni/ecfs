@@ -1,0 +1,42 @@
+* 要避开的黑暗角落
+
+Perl 5并不完美, 有一些特性很容易被错误的使用. 特别是在将几个特性组合在一起使用的时候, 会出现许多奇怪的corner case.
+
+它们就是你在使用Perl中应该避免的黑暗的角落.
+
+** 裸字 (Barewords)
+
+Perl 是一门很自由的语言, 使用它, 你既可以写出有创造力并方便维护的代码,也可以写也一些很奇怪难懂,让人糊涂的代码.
+
+其实上,代码的可维护性是对一个优秀程序员的基本要求,但是Perl本身并没有为你考虑这一点.(作为程序员,你需要知道如何很好的组织你的代码,让它具有很好的可维护性).
+
+Perl的解释器能够理解Perl的内置函数和操作符, 它使用标记(例如$,@,%)来识别变量的类型. 然而当你使用裸字的时候, Perl解释器就不得不强迫自己来猜测你想表达的意思, 大部分情况下,它们能猜对,但是也有一些例外:(
+
+*** 如何使用好裸字
+
+使用"use strict;", 它会对你代码中出现的二义性的裸字发出警告.
+
+**** 对Hash表的Key使用裸字
+
+一般情况下, 在Perl 5中, 在Hash表的Key使用裸字不会出现二义性,因为解释器能够正确地把它们识别为字符串. 例如: $games{pingball}中的pingball,很明显就是一个字符串.
+
+但是，当你想把某个函数的返回作为Hash表的Key时，就可能产生一些问题，在这种情况，你可以采用以下几种方法：
+  
+    - 给函数带上参数（如果可以的话）
+    - 给函数调用带上括号
+    - 在函数前面使用一个‘+’，这会迫使执行该函数，而不是将函数名当成Hash表的Key
+
+
+#+begin_src perl
+# the literal 'shift' is the key; ERROR
+my $value = $items{shift};
+
+# the value produced by shift is the key
+my $value = $items{shift @_};
+my $value = $items{shift()};
+
+# unary plus uses the builtin shift
+
+my $value = $items{+shift};
+#+end_src
+
