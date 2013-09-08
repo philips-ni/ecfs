@@ -1,0 +1,183 @@
+* 管理真实的程序
+
+有些书会教你写些小程序来解决一些小问题，在其中你会学到很多语法层面的东西。
+如果要知道如果去写一些实际的程序程序去解决一些具体的问题，你就必须学会如何管理你写的代码，这正是本节的主题。
+这包括：
+  - 如何组织代码。
+  - 如何保证代码会正确运行。
+  - 如果保证代码能正确处理出错的情况。
+
+你还应该学会如何让代码简洁，清晰和易于维护。
+幸运的是，现代Perl提供了许多工具和技术来帮助你。
+
+** 自动化测试
+
+自动化测试是指通过编写及运行一些小程序来验证你实现的软件是否符合预期。
+自动化测试的过程其实很简单，就是，写代码，运行它，检查是否全部Pass。
+很显然自动化测试比依靠手动测试要可靠得多，而且也高效得多。
+Perl 5提供了大量的工具来帮助你进行自动化测试。
+
+
+*** Test::More
+
+让我们从一个最简单的例子开始，Test::More提供了一个名为ok的函数，ok()授受两个参数，布尔值和字符串，字符串用于描述测试的目的。
+
+#+begin_src perl
+    ok(   1, 'the number one should be true'         );
+    ok(   0, '... and zero should not'               );
+    ok(  '', 'the empty string should be false'      );
+    ok( '!', '... and a non-empty string should not' );
+    done_testing();
+#+end_src  
+
+你想要测试的任何情况到最后都可以改化成一个布尔值，每一个测试断言都是都是指关于这块代码是否符合我们需要的Yes or No的提问。
+
+一个复杂的程序一般都会包含上千种情况，在编写测试代码的时候，应该尽可能的把每一种情况孤立出来进行测试，这样会更容易地测出问题，所以测试的粒度尽可能越小越好。
+
+此外，当你已经有了一组测试代码后，如果你的程序有什么改动，例如引用了一些bug, 你的测试代码会帮你很快地找它们出来。
+
+
+函数done_testing()会通知Test::More所有的测试断言已经执行完毕。如果测试程序在执行done_testing()之前遇到一个运行时错误或者意外退出，测试框架就会通知你是有些地方出错了。
+如果没有done_testing(),你就很难知道这一点。我不得不承认，上面这个例子太简单，以至于基本上不会遇到出错的情况，但是真实的程序远比这个复杂。
+
+Test::More也允许使用test plan来指定断言的个数，你可以这样写：
+
+#+begin_src perl
+    use Test::More tests => 4;
+
+    ok(   1, 'the number one should be true'         );
+    ok(   0, '... and zero should not'               );
+    ok(  '', 'the empty string should be false'      );
+    ok( '!', '... and a non-empty string should not' );
+#+end_src
+
+如果断言的个数与指定的个数不一致，Test::More就会抛出一个错误
+
+*** 运行测试
+
+上述测试程序使用perl来执行会产生以下的结果：
+
+#+begin_src
+Fei@HPenvy ~/git_dir/ecfs/blog/books/modern_perl/examples/chapter_9
+$ perl truth_value.t
+1..4
+ok 1 - the number one should be true
+not ok 2 - ... and zero should not
+#   Failed test '... and zero should not'
+#   at truth_value.t line 4.
+not ok 3 - the empty string should be false
+#   Failed test 'the empty string should be false'
+#   at truth_value.t line 6.
+ok 4 - ... and a non-empty string should not
+# Looks like you failed 2 tests of 4.
+#+end_src
+
+这种格式叫做标准的TAP(the Test Anything Protocol http://testanything.org)文本输出，失败的TAP测试会产生一些诊断信息以方便调试。
+以过使用一个prove（它会调用Test::Harness来分析TAP的输出)的程序你可以得到更多的信息。
+
+#+begin_src perl
+
+$ prove truth_value.t
+truth_value.t .. 1/4
+#   Failed test '... and zero should not'
+#   at truth_value.t line 4.
+
+#   Failed test 'the empty string should be false'
+#   at truth_value.t line 6.
+# Looks like you failed 2 tests of 4.
+truth_value.t .. Dubious, test returned 2 (wstat 512, 0x200)
+Failed 2/4 subtests
+
+Test Summary Report
+-------------------
+truth_value.t (Wstat: 512 Tests: 4 Failed: 2)
+  Failed tests:  2-3
+  Non-zero exit status: 2
+Files=1, Tests=4,  0 wallclock secs ( 0.01 usr  0.03 sys +  0.05 cusr  0.01 csys =  0.11 CPU)
+Result: FAIL
+#+end_src
+
+很容易修复上面程序中的两个出错的地方
+
+#+begin_src perl
+    ok(   ! 0, '... and zero should not'          );
+    ok(  ! '', 'the empty string should be false' );
+#+end_src
+
+这样所有的测试就都通过了。
+
+#+begin_src perl
+$ prove truth_value.t
+truth_value.t .. ok
+All tests successful.
+Files=1, Tests=4,  0 wallclock secs ( 0.00 usr  0.08 sys +  0.01 cusr  0.03 csys =  0.12 CPU)
+Result: PASS
+
+$ prove -v truth_value.t
+truth_value.t ..
+1..4
+ok 1 - the number one should be true
+ok 2 - ... and zero should not
+ok 3 - the empty string should be false
+ok 4 - ... and a non-empty string should not
+ok
+All tests successful.
+Files=1, Tests=4,  0 wallclock secs ( 0.01 usr  0.03 sys +  0.03 cusr  0.03 csys =  0.11 CPU)
+Result: PASS
+
+#+end_src
+
+关于对prove的使用，可以参看 perldoc prove，以下是对一些常用的选项的介绍：
+
+ - -j, 指可以并行运行测试
+ - -l, 可以用它来指定include path
+ - -r t，指会递归地执行t/ 目录下的所有程序测试
+ - --state=slow,save, 指先运行较慢的测试
+
+下面这个proveall别名挺有用的：
+
+#+begin_src perl
+alias proveall='prove -j9 --state=slow,save -lr t'
+#+end_src
+
+*** 更好的比较
+
+尽管自动化测试的核心就是对各种情况的Yes or No的提问，但是在测试中我们住往想要从测试结果中进一步知道我们测出的值是多少，我们预期的值是多少。
+为此Test::More提供了另外几个方便的断言函数。
+
+is()会使用eq操作符来比较给出的两个值，例如:
+
+#+begin_src perl
+    is(         4, 2 + 2, 'addition should work' );
+    is( 'pancake',   100, 'pancakes are numeric' );
+
+$ proveall
+t/truth_value.t .. ok
+t/is.t ........... 1/?
+#   Failed test 'pancakes are numeric'
+#   at t/is.t line 3.
+#          got: 'pancake'
+#     expected: '100'
+# Looks like you failed 1 test of 2.
+t/is.t ........... Dubious, test returned 1 (wstat 256, 0x100)
+Failed 1/2 subtests
+
+Test Summary Report
+-------------------
+#+end_src
+
+is()会把它的参数们按标量处理，也就是说，如果你要检查一个数组元素的个数，可以这样：
+
+#+begin_src perl
+    my @cousins = qw( Rick Kristen Alex
+                      Kaycee Eric Corey );
+    is( @cousins, 6, 'I should have only six cousins' );
+#+end_src
+
+尽管如此，我们还是建议这样写:
+
+#+begin_src perl
+    my @cousins = qw( Rick Kristen Alex
+                      Kaycee Eric Corey );
+    is( scalar(@cousins), 6, 'I should have only six cousins' );
+#+end_src
