@@ -10,7 +10,7 @@
 
 We brag about clever hacks and cringe at nasty hacks as we sling code.
 
-Perl的习惯用法并不是语言的特性或者设计技巧．他们其实是一种机制和写代码的方式，这样写会让你看起来更有Perlish的腔调．
+Perl的习惯用法并不是语言的特性或者设计技巧．它们其实是一种机制和写代码的方式，这样写会让你看起来更有Perlish的腔调．
 
 你当然可以不这样使用，但是在很多地方他们表现了Perl的强大．
 
