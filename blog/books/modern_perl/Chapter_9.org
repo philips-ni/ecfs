@@ -181,3 +181,54 @@ is()会把它的参数们按标量处理，也就是说，如果你要检查一�
                       Kaycee Eric Corey );
     is( scalar(@cousins), 6, 'I should have only six cousins' );
 #+end_src
+
+相应地，Test::More也提供了isnt()，这个函数会使用ne操作符来进行比较，如果给出的两个参数不相等就pass。
+同样地，isnt()在比较的时候也是把参数按标量处理。
+
+is()和isnt()使用eq和ne来进行比较，在大部分情况这都没有问题。
+但是对于一些复杂对象（比如使用了Overloading和Dualvars的），你可能会希望能显式地指定比较的方式。
+cmp_ok()能满足你这样的需求，请看下面的例子：
+
+#+begin_src perl
+    cmp_ok( 100, $cur_balance, '<=',
+           'I should have at least $100' );
+
+    cmp_ok( $monkey, $ape, '==',
+           'Simian numifications should agree' );
+#+end_src
+
+isa_ok()用于测试一个对象是否是一个类（或者其父类）的实例:
+
+#+begin_src perl
+    my $chimpzilla = RobotMonkey->new();
+    isa_ok( $chimpzilla, 'Robot' );
+    isa_ok( $chimpzilla, 'Monkey' );
+#+end_src
+
+can_ok()用于测试一个类或者一个对象能否执行一个指定的方法，或者一组指定的方法。
+
+#+begin_src perl
+    can_ok( $chimpzilla, 'eat_banana' );
+    can_ok( $chimpzilla, 'transform', 'destroy_tokyo' );
+#+end_src
+
+is_deeply()用于比较两个引用：
+
+#+begin_src perl
+    use Clone;
+
+    my $numbers   = [ 4, 8, 15, 16, 23, 42 ];
+    my $clonenums = Clone::clone( $numbers );
+
+    is_deeply( $numbers, $clonenums,
+         'clone() should produce identical items' );
+#+end_src
+
+如果比较失败，Test::More将会尽可能提供足够的诊断信息来表明到底是哪个部分不相等。
+与此类似的模块有：Test::Differences 和Test::Deep。
+
+Test::More还提供了更多的测试函数，但是上述这些是最经常使用的。
+
+*** 组织你的测试
+
+  
