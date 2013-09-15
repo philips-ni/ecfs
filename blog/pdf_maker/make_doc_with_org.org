@@ -1,0 +1,422 @@
+#+LaTeX_CLASS: cn-article
+#+TITLE: Make documentation with Emacs Org mode
+#+AUTHOR: Fei Ni (philips.ni.fei@gmail.com)
+
+* Introduction
+
+As a programmer, I hate writting document. 
+Acctaully, I like writting, I like share my knowledge to others, but I don't want to take time to adjust those font, format in Word or Powerpoint.
+But if I don't adjust them, my document would be very ugly, I'm shy to show it to others.
+
+I use Emacs everyday for my coding. Fontunately, I found,  with Org mode, I can use Emacs to write article and presentation. More imporatantly , it provides something I dreamed before:
+  - Only need focus on content, instead of format.
+  - Pure text , easy to add it into version control.
+  - Easy to convert from article to presentation. (just need change a keyword)
+
+In this article, I will introduce how to configure Emacs, and show you some examples.
+
+* Envirionment
+
+My work enviroment is :
+  - OS version: Ubuntu 12.10
+  - Emacs version: GNU Emacs 23.4.1
+  - Org mode version: Org mode version 8.1.1[fn:org_mode]
+
+[fn:org_mode] Org mode is coming from Emacs, but it may xnot be the latest version, please make sure downloading  latest version from [[http://orgmode.org/][this]].
+    
+* Basic configuration
+
+Basically, Org mode are using the functionality of Latex/XeLatex to generate PDF file, so we need configure a completely Latex/XeLatex envionment.
+XeLatex is a flexiable choice, because it support specifing font which exists in your local system, it's pretty useful while you want to generate PDF which include Chinese words.
+In the end, you need add something into your .emacs to let Emacs know what's your default configration for your article and presentation.
+
+** Packages 
+
+#+begin_LaTeX
+\begin{lstlisting}
+sudo apt-get install texlive-full texlive-xetex latex-cjk-chinese
+sudo apt-get install ttf-sil-gentium  ttf-sil-gentium
+sudo apt-get install ttf-dejavu
+sudo apt-get install texinfo
+\end{lstlisting}
+#+end_LaTeX
+
+
+** Font
+
+In Ubuntu, you can use "fc-list" to understand which fonts are installed in you loacal system.
+
+#+begin_LaTeX
+\begin{lstlisting}
+
+For English fonts:
+$ fc-list :lang=en
+/usr/share/fonts/truetype/tlwg/TlwgTypo-Bold.ttf: Tlwg Typo:style=Bold
+/usr/share/fonts/X11/Type1/lmtti10.pfb: LMMono10:style=Italic
+/usr/share/fonts/truetype/arphic/uming.ttc: AR PL UMing TW MBE:style=Light
+/usr/share/fonts/X11/Type1/lmtko10.pfb: LMMonoLt10:style=BoldOblique
+/usr/share/fonts/X11/Type1/lmbo10.pfb: LMRomanDemi10:style=Oblique
+/usr/share/fonts/truetype/tlwg/Umpush.ttf: Umpush:style=Book
+/usr/share/fonts/X11/Type1/c0649bt_.pfb: Bitstream Charter:style=Italic
+/usr/share/fonts/X11/Type1/p052024l.pfb: URW Palladio L:style=Bold Italic
+...
+
+For Chinese fonts:
+
+$ fc-list :lang=zh
+/usr/share/fonts/truetype/arphic/uming.ttc: AR PL UMing TW MBE:style=Light
+/usr/share/fonts/truetype/arphic/ukai.ttc: AR PL UKai CN:style=Book
+/usr/share/fonts/truetype/arphic/ukai.ttc: AR PL UKai HK:style=Book
+/home/fni/.fonts/simsun.ttc: NSimSun,新宋体:style=Regular,常规
+/usr/share/fonts/truetype/arphic/ukai.ttc: AR PL UKai TW:style=Book
+/usr/share/fonts/X11/misc/wenquanyi_10ptb.pcf: WenQuanYi Bitmap Song:style=Bold
+/usr/share/fonts/X11/misc/wenquanyi_12pt.pcf: WenQuanYi Bitmap Song:style=Regular
+...
+
+\end{lstlisting}
+#+end_LaTeX
+
+
+** .emacs file
+
+Adding following into your .emacs.
+
+#+begin_LaTeX
+\begin{lstlisting}
+
+(require 'org)
+(require 'org-install)
+(require 'ob-ditaa)
+(require 'org-latex)
+(require 'ob-tangle)
+(require 'ox-latex)
+
+;; Let the exporter use the -shell-escape option to let latex
+;; execute external programs.
+;; This obviously and can be dangerous to activate!
+
+(setq org-latex-pdf-process
+      '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+
+(unless (boundp 'org-latex-classes)
+  (setq org-latex-classes nil))
+(add-to-list 'org-latex-classes
+             ;; beamer class, for presentations
+             '("beamer"
+               "\\documentclass[11pt]{beamer}\n
+\\usepackage{fontspec}\n
+\\usepackage{xeCJK}\n
+\\setCJKmainfont[Mapping=tex-text]{WenQuanYi Micro Hei}\n
+\\setCJKmonofont[Mapping=tex-text]{SimSun}\n
+\\setmainfont[Mapping=tex-text]{TeXGyrePagella}\n
+\\setmonofont[Mapping=tex-text]{Courier 10 Pitch}\n
+\\setsansfont[Mapping=tex-text]{SimSun}\n
+\\usetheme[pageofpages=of,% String used between the current page and the
+  % total page count.
+  alternativetitlepage=true,% Use the fancy title page.
+  titlepagelogo=logo-telekinesis,% Logo for the first page.
+]{PaloAlto} \n
+\\usecolortheme{wolverine}\n
+      \\beamertemplateballitem\n
+      \\setbeameroption{show notes}
+      \\usepackage[utf8]{inputenc}\n
+      \\usepackage[T1]{fontenc}\n
+      \\usepackage{hyperref}\n
+      \\usepackage{color}
+      \\usepackage{listings}
+      \\lstset{numbers=none,tabsize=4,
+  frame=single,
+  basicstyle=\\small,
+  showspaces=false,showstringspaces=false,
+  showtabs=false,
+  keywordstyle=\\color{blue}\\bfseries,
+  commentstyle=\\color{red},
+  }\n
+  \\usepackage{verbatim}\n
+  \\institute{institute}\n          
+  \\subject{{{{beamersubject}}}}\n"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\begin{frame}[fragile]\\frametitle{%s}"
+                "\\end{frame}"
+                "\\begin{frame}[fragile]\\frametitle{%s}"
+                "\\end{frame}")))
+
+(add-to-list 'org-latex-classes
+             '("cn-article"
+               "\\documentclass[10pt,a4paper]{article}
+\\usepackage{graphicx}
+\\usepackage{xcolor}
+\\usepackage{xeCJK}
+\\usepackage{lmodern}
+\\usepackage{verbatim}
+\\usepackage{fixltx2e}
+\\usepackage{longtable}
+\\usepackage{float}
+\\usepackage{tikz}
+\\usepackage{wrapfig}
+\\usepackage{soul}
+\\usepackage{textcomp}
+\\usepackage{listings}
+\\usepackage{geometry}
+\\usepackage{algorithm}
+\\usepackage{algorithmic}
+\\usepackage{marvosym}
+\\usepackage{wasysym}
+\\usepackage{latexsym}
+\\usepackage{natbib}
+\\usepackage{fancyhdr}
+\\usepackage[xetex,colorlinks=true,CJKbookmarks=true,
+linkcolor=blue,
+urlcolor=blue,
+menucolor=blue]{hyperref}
+\\defaultfontfeatures{Mapping=tex-text}
+\\usepackage{fontspec,xunicode,xltxtra}
+\\setCJKmainfont{WenQuanYi Zen Hei}   % 设置缺省中文字体
+\\setmainfont{Gentium} 
+\\setsansfont[BoldFont=WenQuanYi Zen Hei Sharp]{AR PL UKai CN}
+\\setmonofont{Ubuntu Mono}
+\\newcommand\\fontnamemono{WenQuanYi Micro Hei} %等宽字体
+\\newfontinstance\\MONO{\\fontnamemono}
+\\newcommand{\\mono}[1]{{\\MONO #1}}
+\\hypersetup{unicode=true}
+\\geometry{a4paper, textwidth=6.5in, textheight=10in,
+marginparsep=7pt, marginparwidth=.6in}
+\\definecolor{foreground}{RGB}{220,220,204}%浅灰
+\\definecolor{background}{RGB}{62,62,62}%浅黑
+\\definecolor{preprocess}{RGB}{250,187,249}%浅紫
+\\definecolor{var}{RGB}{239,224,174}%浅肉色
+\\definecolor{string}{RGB}{154,150,230}%浅紫色
+\\definecolor{type}{RGB}{225,225,116}%浅黄
+\\definecolor{function}{RGB}{140,206,211}%浅天蓝
+\\definecolor{keyword}{RGB}{239,224,174}%浅肉色
+\\definecolor{comment}{RGB}{180,98,4}%深褐色
+\\definecolor{doc}{RGB}{175,215,175}%浅铅绿
+\\definecolor{comdil}{RGB}{111,128,111}%深灰
+\\definecolor{constant}{RGB}{220,162,170}%粉红
+\\definecolor{buildin}{RGB}{127,159,127}%深铅绿
+\\punctstyle{kaiming}
+\\title{}
+\\fancyfoot[C]{\\bfseries\\thepage}
+\\chead{\\MakeUppercase\\sectionmark}
+\\pagestyle{fancy}
+\\tolerance=1000
+[NO-DEFAULT-PACKAGES]
+[NO-PACKAGES]"
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+("\\paragraph{%s}" . "\\paragraph*{%s}")
+("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+
+(setq org-export-latex-listings t)
+;; Options for \lset command（reference to listing Manual)
+(setq org-export-latex-listings-options
+      '(
+        ("basicstyle" "\\color{foreground}\\small\\mono")           
+        ("keywordstyle" "\\color{function}\\bfseries\\small\\mono") 
+        ("identifierstyle" "\\color{doc}\\small\\mono")
+        ("commentstyle" "\\color{comment}\\small\\itshape")         
+        ("stringstyle" "\\color{string}\\small")                    
+        ("showstringspaces" "false")                                
+        ("numbers" "left")                                          
+        ("numberstyle" "\\color{preprocess}")                       
+        ("stepnumber" "1")                                          
+        ("backgroundcolor" "\\color{background}")                   
+        ("tabsize" "4")                                             
+        ("captionpos" "t")                                          
+        ("breaklines" "true")                                       
+        ("breakatwhitespace" "true")                                
+        ("showspaces" "false")                                      
+        ("columns" "flexible")                                      
+        ("frame" "single")                                          
+        ("frameround" "tttt")                                       
+        ("framesep" "0pt")
+        ("framerule" "8pt")
+        ("rulecolor" "\\color{background}")
+        ("fillcolor" "\\color{white}")
+        ("rulesepcolor" "\\color{comdil}")
+        ("framexleftmargin" "10mm")
+        ))
+;; Make Org use ido-completing-read for most of its completing prompts.
+(setq org-completion-use-ido t)
+;; 各种Babel语言支持
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((R . t)
+   (emacs-lisp . t)
+   (matlab . t)
+   (C . t)
+   (perl . t)
+   (sh . t)
+   (ditaa . t)
+   (python . t)
+   (haskell . t)
+   (dot . t)
+   (latex . t)
+   (js . t)
+   ))
+
+\end{lstlisting}
+#+end_LaTeX
+
+Yeah, most of above configration are copied from other articles in Internet.
+But there are something need to point out.
+
+
+*** Specify to use XeLatex 
+
+By default, pdflatex will be used to generate PDF.
+
+Following statement can be used to spcify using XeLatex
+
+#+begin_LaTeX
+\lstset{escapechar=@,style=customc}
+\begin{lstlisting}
+
+(setq org-latex-pdf-process
+      '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+\end{lstlisting}
+
+#+end_LaTeX
+
+
+*** Specify your article/presentation configration
+
+For Article,
+
+#+begin_LaTeX
+\begin{lstlisting}
+
+(add-to-list 'org-latex-classes
+             '("cn-article"
+               "\\documentclass[10pt,a4paper]{article}
+...
+\\usepackage[xetex,colorlinks=true,CJKbookmarks=true,
+linkcolor=blue,
+urlcolor=blue,
+menucolor=blue]{hyperref}
+\\defaultfontfeatures{Mapping=tex-text}
+\\usepackage{fontspec,xunicode,xltxtra}
+\\setCJKmainfont{WenQuanYi Zen Hei}   % 设置缺省中文字体
+\\setmainfont{Gentium} 
+\\setsansfont[BoldFont=WenQuanYi Zen Hei Sharp]{AR PL UKai CN}
+\\setmonofont{Ubuntu Mono}
+\\newcommand\\fontnamemono{WenQuanYi Micro Hei} %等宽字体
+\\newfontinstance\\MONO{\\fontnamemono}
+\\newcommand\\fontnamemono{WenQuanYi Micro Hei} %等宽字体
+\\newfontinstance\\MONO{\\fontnamemono}
+\\newcommand{\\mono}[1]{{\\MONO #1}}
+\\hypersetup{unicode=true}
+
+\end{lstlisting}
+#+end_LaTeX
+
+For Presentation,  
+
+#+begin_LaTeX
+\begin{lstlisting}
+
+(unless (boundp 'org-latex-classes)
+  (setq org-latex-classes nil))
+(add-to-list 'org-latex-classes
+             ;; beamer class, for presentations
+             '("beamer"
+               "\\documentclass[11pt]{beamer}\n
+               "\\documentclass[11pt]{beamer}\n
+               \\usepackage{fontspec}\n
+               \\usepackage{xeCJK}\n
+               \\setCJKmainfont[Mapping=tex-text]{WenQuanYi Micro Hei}\n
+               \\setCJKmonofont[Mapping=tex-text]{SimSun}\n
+               \\setmainfont[Mapping=tex-text]{TeXGyrePagella}\n
+               \\setmonofont[Mapping=tex-text]{Courier 10 Pitch}\n
+               \\setsansfont[Mapping=tex-text]{SimSun}\n
+               \\usetheme[pageofpages=of,% String used between the current page and the
+               % total page count.
+               alternativetitlepage=true,% Use the fancy title page.
+               titlepagelogo=logo-telekinesis,% Logo for the first page.
+               ]{PaloAlto} \n  %set theme
+               \\usecolortheme{wolverine}\n
+....
+
+\end{lstlisting}
+#+end_LaTeX
+
+
+Just please notice, you need make sure configured fonts and themes existed in your local system.
+You can check your font with "fc-list" command, and check your theme with :
+
+#+begin_LaTeX
+\begin{lstlisting}[language=text]
+
+$ ls /usr/share/texmf/tex/latex/beamer/base/themes/theme/
+beamercolorthemechameleon.sty  beamerthemeCambridgeUS.sty  beamerthemeMalmoe.sty
+beamercolorthemefreewilly.sty  beamerthemeCopenhagen.sty   beamerthemeMarburg.sty
+beamercolorthemenouvelle.sty   beamerthemeDarmstadt.sty    beamerthemeMontpellier.sty
+beamerinnerthemefancy.sty      beamerthemedefault.sty      beamerthemePaloAlto.sty
+beamerouterthemedecolines.sty  beamerthemeDresden.sty      beamerthemePittsburgh.sty
+beamerthemeAnnArbor.sty        beamerthemeFrankfurt.sty    beamerthemeRochester.sty
+beamerthemeAntibes.sty         beamerthemeGoettingen.sty   beamerthemeSingapore.sty
+beamerthemeBergen.sty          beamerthemeHannover.sty     beamerthemeSzeged.sty
+beamerthemeBerkeley.sty        beamerthemeIlmenau.sty      beamerthemeTorino.sty
+beamerthemeBerlin.sty          beamerthemeJuanLesPins.sty  beamerthemeWarsaw.sty
+beamerthemeBoadilla.sty        beamerthemeLuebeck.sty      compatibility
+beamerthemeboxes.sty           beamerthemeMadrid.sty
+\end{lstlisting}
+#+end_LaTeX
+
+
+* Examples
+** A article example
+
+#+begin_LaTeX
+\begin{lstlisting}[language=text]
+  
+  #+LaTeX_CLASS: cn-article
+  #+TITLE: My little document
+  
+  * Introduction 1
+    
+    - 测试中文字符．    
+  ** Normal distribution
+  
+     Probability density of the normal distribution, using familiar TeX notation
+     for formulae:
+   
+     $$\frac{1}{\sqrt{2\pi\sigma^2}}e^{ -\frac{(x-\mu)^2}{2\sigma^2} }$$
+  
+  ** Some table
+  
+  | *Greek God*     | *Roman God* | *Element*      |
+  |-----------------+-------------+----------------|
+  | Zeus            | Jupiter     | Sky and clouds |
+  | Hera            | Juno        | Family         |
+  | Poseidon        | Neptune     | Sea            |
+  | Hades[fn:hades] | Pluto       | Underworld     |
+  
+  [fn:hades] a good person
+  
+\end{lstlisting}
+#+end_LaTeX
+
+You can check [[https://github.com/philips-ni/ecfs/raw/master/blog/pdf_maker/article.pdf][here]] to see what's the PDF like.
+
+
+
+** A presentation example
+
+You can check [[https://github.com/philips-ni/ecfs/blob/master/blog/pdf_maker/presentation.org][here]] to see the org file.  
+
+You can check [[https://github.com/philips-ni/ecfs/blob/master/blog/pdf_maker/presentation.pdf][here]] to see what's the PDF like.
+
+* References
+
+  - [[http://angel-de-vicente.blogspot.com/2013/04/presentations-with-org-mode-beamer.html][presentations-with-org-mode-beamer]]
+  - [[http://emacs-fu.blogspot.com/2011/04/nice-looking-pdfs-with-org-mode-and.html][nice-looking-pdfs-with-org-mode]]
+  - [[http://www.cnblogs.com/visayafan/archive/2012/06/13/2547705.html][About-Theme]]
+  - [[http://blog.sina.com.cn/s/blog_59cf67260100np1q.html][About-Font]]
+  
+
