@@ -1,0 +1,71 @@
+#+LaTeX_CLASS: cn-article
+#+TITLE: My little document
+
+* Introduction 1
+  
+这是一篇用中文写的文章希望使用可以很好地生成PDF文件.
+  
+** Normal distribution
+
+   Probability density of the normal distribution, using familiar TeX notation
+   for formulae:
+ 
+   $$\frac{1}{\sqrt{2\pi\sigma^2}}e^{ -\frac{(x-\mu)^2}{2\sigma^2} }$$
+
+** Some table
+
+| *Greek God*     | *Roman God* | *Element*      |
+|-----------------+-------------+----------------|
+| Zeus            | Jupiter     | Sky and clouds |
+| Hera            | Juno        | Family         |
+| Poseidon        | Neptune     | Sea            |
+| Hades[fn:hades] | Pluto       | Underworld     |
+
+[fn:hades] a good person
+
+
+* Introduction 2
+  
+这是一篇用中文写的文章希望使用可以很好地生成PDF文件.
+  
+** Normal distribution
+
+   Probability density of the normal distribution, using familiar TeX notation
+   for formulae:
+ 
+   $$\frac{1}{\sqrt{2\pi\sigma^2}}e^{ -\frac{(x-\mu)^2}{2\sigma^2} }$$
+
+** Some table
+
+| *Greek God*     | *Roman God* | *Element*      |
+|-----------------+-------------+----------------|
+| Zeus[fn:zeus]   | Jupiter     | Sky and clouds |
+| Hera            | Juno        | Family         |
+| Poseidon        | Neptune     | Sea            |
+| Hades           | Pluto       | Underworld     |
+
+[fn:zeus] a bad person
+
+
+
+* Introduction 3
+  
+这是一篇用中文写的文章希望使用可以很好地生成PDF文件.
+  
+** Normal distribution
+
+   Probability density of the normal distribution, using familiar TeX notation
+   for formulae:
+ 
+   $$\frac{1}{\sqrt{2\pi\sigma^2}}e^{ -\frac{(x-\mu)^2}{2\sigma^2} }$$
+
+** Some table
+
+| *Greek God* | *Roman God*     | *Element*      |
+|-------------+-----------------+----------------|
+| Zeus        | Jupiter         | Sky and clouds |
+| Hera        | Juno            | Family         |
+| Poseidon    | Neptune         | Sea            |
+| Hades       | Pluto[fn:pluto] | Underworld     |
+
+[fn:pluto] This is not a person.

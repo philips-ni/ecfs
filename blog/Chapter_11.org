@@ -1,0 +1,446 @@
+* 要避开的黑暗角落
+
+Perl 5并不完美, 有一些特性很容易被错误的使用. 特别是在将几个特性组合在一起使用的时候, 会出现许多奇怪的corner case.
+
+它们就是你在使用Perl中应该避免的黑暗的角落.
+
+** 裸字 (Barewords)
+
+Perl 是一门很自由的语言, 使用它, 你既可以写出有创造力并方便维护的代码,也可以写也一些很奇怪难懂,让人糊涂的代码.
+
+其实上,代码的可维护性是对一个优秀程序员的基本要求,但是Perl本身并没有为你考虑这一点.(作为程序员,你需要知道如何很好的组织你的代码,让它具有很好的可维护性).
+
+Perl的解释器能够理解Perl的内置函数和操作符, 它使用标记(例如$,@,%)来识别变量的类型. 然而当你使用裸字的时候, Perl解释器就不得不强迫自己来猜测你想表达的意思, 大部分情况下,它们能猜对,但是也有一些例外:(
+
+*** 可以使用裸字的地方
+
+使用"use strict;", 它会对你代码中出现的二义性的裸字发出警告, 但在以下这些情况写使用裸字是被允许的。
+
+**** 对Hash表的Key使用裸字
+
+一般情况下, 在Perl 5中, 在Hash表的Key使用裸字不会出现二义性,因为解释器能够正确地把它们识别为字符串. 例如: $games{pingball}中的pingball,很明显就是一个字符串.
+
+但是，当你想把某个函数的返回作为Hash表的Key时，就可能产生一些问题，在这种情况，你可以采用以下几种方法：
+  
+    - 给函数带上参数（如果可以的话）
+    - 给函数调用带上括号
+    - 在函数前面使用一个‘+’，这会迫使执行该函数，而不是将函数名当成Hash表的Key
+
+
+#+begin_src perl
+# the literal 'shift' is the key; ERROR
+my $value = $items{shift};
+
+# the value produced by shift is the key
+my $value = $items{shift @_};
+my $value = $items{shift()};
+
+# unary plus uses the builtin shift
+
+my $value = $items{+shift};
+#+end_src
+
+**** 对包名使用裸字
+
+在Perl 5中包名一般都使用裸字. 如果你对这个习惯(包名一般都是首字母大写，而函数名一般都是首字母小写)不熟悉的话,你就有可能遇到命名冲突的问题.
+
+让我们来回答这样一个问题: 对于这段代码 
+
+#+begin_src perl
+Package->method(); 
+#+end_src
+
+这到底是指调用一个名为Package的函数，然后对其返回的对象调用其名为method的方法呢?还是调用在名为Package的包命名空间里叫做method的方法?
+
+答案是: It depends.
+
+如果要迫使Perl解释器按上述第二种方式解析，我们可以使用Package::->method();
+
+#+begin_src perl
+
+    # probably a class method
+    Package->method();
+
+    # definitely a class method
+    Package::->method();
+
+#+end_src
+
+**** 对命名代码块使用裸字
+
+特殊的命名代码块如AUTOLOAD, BEGIN, CHECK, DESTROY, END, INIT以及 UNITCHECK, 它们都是裸字，而且对于它们你可以省掉前面的sub.
+
+例如，你可能见过这样的代码：
+
+#+begin_src perl
+    package Monkey::Butler;
+
+    BEGIN { initialize_simians( __PACKAGE__ ) }
+
+    sub AUTOLOAD { ... }
+
+#+end_src
+
+其实AUTOLOAD前面的sub是可以省掉的,只是很少有人这么干而已.
+
+**** 对常量使用裸字
+
+常量一般都像这样声明：
+
+#+begin_src perl
+    # don't use this for real authentication
+    use constant NAME     => 'Bucky';
+    use constant PASSWORD => '|38fish!head74|';
+
+    return unless $name eq NAME && $pass eq PASSWORD;
+
+#+end_src
+
+值得注意的是: 不支持在双引号里像内插一般标量那样插入常量，所以只能这样写
+
+#+begin_src perl
+print "hello " . NAME . "\n" ;
+#+end_src
+
+事实上，常量只是原型函数的一种特殊形式而已，当你预先声明了一个函数的原型，解释器就知道如何处理这个函数，并且对解释过程中遇到的二义性问题提出警告.
+所以原型函数的一些缺点，也都会存在对常量的使用中.
+
+*** 不建议的裸字用法
+
+无论你的代码写得多仔细，在使用裸字时仍然有可能遇到二义性的问题，所以在太多数情况下，你应该尽量避免使用它，但是在遗留代码中仍然会碰到一些对裸字的使用方法。
+以下就对此作一些介绍。
+
+**** 不建议对函数调用使用裸字
+
+在没有use strict 'subs'的情况下，这样写"foo;"就会调用foo函数，其实写成这样"foo();"就会好很多。
+
+你可以使用perl -MO=Deparse,-p (请见 perldoc B::Deparse) 会提示你加上括号。
+
+#+begin_src perl
+fni@fni-ThinkCentre-M81:~/github/ecfs/blog/books/modern_perl/examples/chapter_11$ perl -MO=Deparse,-p bareword_sub.pl
+sub foo {
+    print("hello,foo\n");
+}
+foo();
+bareword_sub.pl syntax OK
+#+end_src
+
+**** 不建议对Hash的值使用裸字
+
+一些旧代码可能像这样:
+
+#+begin_src perl
+    # poor style; do not use
+    my %parents =
+    (
+        mother => Annette,
+        father => Floyd,
+    );
+
+#+end_src
+
+二义性就在于，如果定义了名为Annette和Floyd的函数，就会调用该函数然后把函数的返回值作为Hash的值。如果没有定义这些函数，则会把它们当成字符串"Annette"和"Floyd"。
+幸好，use strict 'subs'会对此报告一个错误。
+
+
+**** 不建议对文件句柄使用裸字
+
+在支持对文件句柄使用词法变量之前，所有的文件或者目录句柄都只能使用裸字。
+
+在Perl 5，你应该对文件句柄尽可能的使用词法变量，除了STDIN, STDOUT, STDERR。
+
+
+**** 不建议对sort函数的第一个参数使用裸字
+
+sort函数支持把直接作排序的函数的函数名传入其第一个参数，这对Perl解释器来说，不存在二义性，但是对于读代码的人来说，却容易混淆。
+一个建议是，给sort函数传入一个指向直接作排序函数的引用。
+
+#+begin_src perl
+    # bareword style
+    my @sorted = sort compare_lengths @unsorted;
+
+    # function reference in scalar
+    my $comparison = \&compare_lengths;
+    my @sorted     = sort $comparison @unsorted;
+
+#+end_src
+
+第二种办法避免使用了裸字，但多出了一行代码，主要是因为Perl 5不支持以下这种写法:
+
+#+begin_src perl
+    # does not work
+    my @sorted = sort \&compare_lengths @unsorted;
+#+end_src
+
+其实以上这两种方法都有令人费解的地方，一个更好的办法是使用sort的代码块形式，就像这样：
+
+#+begin_src perl
+    my @sorted = sort { dosomething(); } @unsorted;
+#+end_src
+
+再次提醒，如果你一定要写成sort的函数形式，请记得在注释里加上一些解释性的文字。
+
+** 间接对象
+
+在Perl 5中"new"并不是一个操作符，在Perl 5中构造函数可以是任何函数，只要它是返回一个对象。习惯上，构造函数是一个叫做new()的类方法(class method)，但是，从语法角度，你完全可以使用别的名字。
+
+有一些旧的Perl 5教程建议像C++或者Java那样调用构造函数。
+
+#+begin_src perl
+my $q = new CGI; # DO NOT USE
+#+end_src
+
+其实建议的方法是这样：
+
+#+begin_src perl
+my $q = CGI->new();
+#+end_src
+
+*** 对裸字的间接引用
+
+在第一个例子里(my $q = new CGI;)，动词(方法)放在名词(对象)前面，这对人类语言来说没什么问题，但是却给Perl 5的解释器增加了难度。
+
+因为方法名和对象名都是裸字，Perl 5解释器就不得不根据已定义的包，函数等等信息来猜测这句话的意思，基本上它们都能猜对，但是有些时候也有可能猜错，但是如果出错的话，出错信息会让人更加混淆。
+
+更糟糕的是，这种猜测还跟Perl代码及模块的编译顺序有关，这样就会带来更多的不确定性。
+
+另外如果还需要给构造函数传入参数的话，事情就会变得更复杂。
+
+#+begin_src perl
+    # DO NOT USE
+    my $obj = new Class( arg => $value );
+#+end_src
+
+因为Class(arg=> $value);看上去更像是一个对"Class"的函数调用。这就不仅让代码的阅读者有些混淆，同时也给Perl解释器的正确解析增加了难度。
+
+这个时候如果真的有一个函数名字就叫做Class(),Perl解释器就会按函数调用处理，尽管这种情况很少写，但如果发生了，我们就不得不花很多时候去调试。
+
+所以我们应该尽量避免这种用法。
+
+*** Indirect Notation Scalar Limitations
+
+这种语法还有一个缺点就是解释器会把一个标量表达式当成一个对象，请看下例：
+
+#+begin_src perl
+    # DOES NOT WORK AS WRITTEN
+    say $config->{output} 'Fun diagnostic message!';
+#+end_src
+
+这样写，Perl就会尝试把$config->{output}当成一个对象实例，然后再调用该实例的方法say()，这当然不是我们想要的。
+
+print, close 和say，所有这个作用于文件句柄上的内置函数，都是使用这种间接的语法，如果要操作的句柄是包变量还好，如果是词法变量就会导致上述的问题。
+要解决这个问题，可以这样写：
+
+#+begin_src perl
+say {$config->{output}} 'Fun diagnostic message!';
+#+end_src
+
+
+*** Alternatives to Indirect Notation
+
+在某些情况下，既使我们这样写,也存在问题。
+#+begin_src perl
+    my $q   = CGI->new();
+    my $obj = Class->new( arg => $value );
+#+end_src
+
+如果在程序中定义了一个叫做CGI的函数，这样Perl解释器就会把CGI这个裸字当成一个函数调用，于是就等效于：
+#+begin_src perl
+     my $q   = CGI()->new();
+#+end_src
+
+当然如果我们有很好的命名规范，这样的事是可以避免的。我们也可以这样写来消除二义性。
+
+#+begin_src perl
+    # package separator
+    my $q = CGI::->new();
+
+    # unambiguously a string literal
+    my $q = 'CGI'->new();
+#+end_src
+但是这种办法有些笨重，几乎没有人这么写，本书也不推荐，推荐的作法是使用
+
+#+begin_src perl
+my $q = CGI->new()
+#+end_src
+
+并遵守代码的命名规范。
+
+CPAN 中的Perl::Critic::Policy::Dynamic::NoIndirect (Perl::Critic的一个插件)可以用来识别代码中的间接引用，你可以这样使用:
+
+#+begin_src perl
+    # warn on indirect use
+    no indirect;
+
+    # throw exceptions on their use
+    no indirect ':fatal';
+#+end_src
+
+
+** 原型(Prototypes)
+
+原型是指定义在函数里的用来帮助解释器理解该函数参数(类型，个数)的元数据，许多语言都提供了类似的功能，但是Perl的这个特性与其它语言有很大的差异。
+
+原型允许用户将其自己的函数的行为定义成跟内置函数的行为一样。让我们来看内置函数push，它可以接受将一个数组以及一个列表作为其参数。
+
+函数原型是声明的一部分。
+
+#+begin_src perl
+    sub foo        (&@);
+    sub bar        ($$) { ... }
+    my  $baz = sub (&&) { ... };
+#+end_src
+
+函数前置声明中的原型必须跟函数定义中的原型相匹配，否则Perl就会给出告警地。
+但是你也可以在前置声明中不包括原型的部分，而只需要在函数定义的时候对原型进行定义。
+
+如果把函数名作为参数传给内置函数prototype(),它会返回一个该函数原型的定义，请看：
+
+#+begin_src perl
+    $ perl -E "say prototype 'CORE::push';"
+    \@@
+    $ perl -E "say prototype 'CORE::keys';"
+    \%
+    $ perl -E "say prototype 'CORE::open';"
+    *;$@
+#+end_src
+
+对那些没有定义原型的内置函数来说，prototype会返回undef。
+
+#+begin_src perl
+    say prototype 'CORE::system' // 'undef'
+    # undef; cannot emulate builtin system
+
+    say prototype 'CORE::prototype' // 'undef'
+    # undef; builtin prototype has no prototype
+#+end_src
+
+让我们再来看push的例子：
+
+#+begin_src perl
+    $ perl -E "say prototype 'CORE::push';"
+    \@@
+#+end_src
+
+@表示列表，\@表示对第一个传入的参数按引用处理。于是push其原型的意思就是，将每一个传入的数组按引用方式处理，第二参数为数组。于是你可以以下面的方式来实现你自己的mypush:
+
+#+begin_src perl
+    sub mypush (\@@)
+    {
+        my ($array, @rest) = @_;
+        push @$array, @rest;
+    }
+
+main::(prototype.pl:10):        my @a = ( 1,2 );
+  DB<1> n
+main::(prototype.pl:11):        mypush( @a, 3,4);
+  DB<1> s
+main::mypush(prototype.pl:6):     my ($array, @rest) = @_;
+  DB<1> T
+. = main::mypush(ref(ARRAY), 3, 4) called from file `prototype.pl' line 11
+#+end_src
+
+*** 原型的问题
+
+原型会改变Perl解释器处理函数参数的方式. 它不能指定函数参数的类型和个数，也不能支持命名参数的使用.
+原型还有一个作用就是用于在函数调用时显式地指定其应该按标量方式处理。
+
+
+#+begin_src perl
+    sub numeric_equality($$)
+    {
+        my ($left, $right) = @_;
+        return $left == $right;
+    }
+
+    my @nums = 1 .. 10;
+
+    say 'They're equal, whatever that means!'
+        if numeric_equality @nums, 10;
+#+end_src
+... 但是这只适用于简单的表达式。
+#+begin_src perl
+    sub mypush(\@@);
+
+    # compilation error: prototype mismatch
+    # (expected array, got scalar assignment)
+    mypush( my $elems = [], 1 .. 20 );
+
+#+end_src
+要调试这个问题，mypush的用户必须知道：
+  － mypush 存在一个原型定义
+  － 这个原型定义的限制条件是什么
+
+更糟糕的是，上面这个错误仅仅是众多原型相关错误中最简单的.
+
+*** 正确使用原型
+
+尽管使用原型的时候存在着许多陷井，但以下这些用法还是很有意义的：
+
+首先，在重载内置函数時应该指定与该内置函数相同的原型定义，（在重载的时候，你也可以选择不指定原型，但是加上原型定义可以保证重载的内置函数与原内置函数支持相同的接口）。
+另外，在重载一个内置函数时请记得使用 user subs.
+
+#+begin_src perl
+    use subs 'push';
+    sub push (\@@) { ... }
+
+#+end_src
+
+另一个使用原型的例子是"定义编译时常量", 当Perl解释器遇到一个具有空原型定义的函数时，它会把该函数当成一个常量表达式，优化器就会把所有对此函数的调用转化成对常量的引用。
+
+#+begin_src perl
+sub PI () { 4 * atan2(1, 1) }
+#+end_src
+
+这样当代码中遇到PI(),或PI时，Perl解释器都会把它们替换成 4 * atan2(1, 1) 的值.
+
+当然你可以使用"use constant =>  4 * atan2(1, 1);", 其实它的内部实现正是sub PI () { 4 * atan2(1, 1) }.
+这样写有一个缺点就是它不能像变量一样直接插入在字符串.
+不过Const::Fast提供了另一种可以支持字符串内插的常量.
+
+原型还可以用于扩展Perl的用法，使得其支持像处理匿名函数一样处理代码块(code block). Test::Exception就根据这个实现了一个用于延迟计算的API.
+throws\_ok()有三个参数: 
+  - 准备执行的代码块
+  - 用于模式匹配的正则表达式
+  - 对该测试的文本描述(可选)
+
+#+begin_src perl
+use Test::More tests => 1;
+use Test::Exception;
+
+throws_ok
+    { my $unobject; $unobject->yoink() }
+    qr/Can't call method "yoink" on an undefined/,
+    'Method on undefined invocant should fail';
+    
+#+end_src
+
+throws_ok()函数的原型是&$;$, 这表明如果第一个参数是一个代码块，就会把它转化为匿名函数处理，第二个参数是一个标题，第三个函数是一个可选的标量.
+仔细的读者可能注意到代码块后并没能逗号, 这是Perl的一个怪癖，在代码块后，它期待跟着空格而不是逗号.
+
+当然如果不使用原型，你也可以这样来调用 throws\_ok():
+
+#+begin_src perl
+use Test::More tests => 1;
+use Test::Exception;
+
+throws_ok(
+   sub { my $unobject; $unobject->yoink() },
+   qr/Can't call method "yoink" on an undefined/,
+   'Method on undefined invocant should fail' );
+#+end_src
+
+最后一个对原型的好的使用是: 为sort()定义比较函数, Ben Tilly给出过一个例子：
+
+#+begin_src perl
+    sub length_sort ($$)
+    {
+        my ($left, $right) = @_;
+        return length($left) <=> length($right);
+    }
+
+    my @sorted = sort length_sort @unsorted
+#+end_src
+
+原型$$，会迫使sort把待排序的数据对(全局变量$a,$b)作为参数传进length_sort.
+不要小瞧了这一点，如果你的比较逻辑很复杂，使用这种方法你就可以把它实现在一个独立的函数里而不是代码块里。这样你代码的可读性会好很多.

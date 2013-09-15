@@ -1,0 +1,55 @@
+#+LaTeX_CLASS: beamer
+#+TITLE: Example Presentation
+#+AUTHOR: 倪飞
+
+* My presentation
+
+** Overview
+
+   1. Introduction
+
+   2. Main part
+
+   3. Questions
+    
+    
+** Some interesting stuff
+    
+*** an important point
+    
+    - subpoint a
+      
+    - subpoint b
+
+** Graphics
+
+*** a picture
+
+*** another picture
+#+LaTeX:\includegraphics[width=3in]{array_box.png}
+
+** More interesting stuff
+
+*** some C++ code
+#+begin_LaTeX
+\begin{lstlisting}[language=c]
+for (int i = 1; i != 10; ++i) 
+    std::cout << i << ": hello, world!"
+              << std::endl;
+\end{lstlisting}
+#+end_LaTeX
+
+*** and some Python...
+
+#+begin_LaTeX
+\begin{lstlisting}[language=python]
+for i in range(1,10):
+        print i, "hello, world!"
+\end{lstlisting}
+#+end_LaTeX
+
+* Demo 
+** What does it like?
+* Q&A
+** Q&A
+我爱北京天安门,天安门上太阳升.
