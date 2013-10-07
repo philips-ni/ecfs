@@ -229,6 +229,37 @@ is_deeply()用于比较两个引用：
 
 Test::More还提供了更多的测试函数，但是上述这些是最经常使用的。
 
+
 *** 组织你的测试
 
   
+CPAN发行包一般都包括t/目录，在这个目录下会存放的所有后缀为.t的测试脚本。
+当你使用Module::Build或者ExtUtils::MakeMaker来构建发行包的时候，会包括一个步骤，在这个步骤里，t/*.t都会被运行，然后根据其运行情况给出测试报告。
+尽管并没有一个明确的文档来告诉你如何组织这些.t文件，但以下两个惯例是大多数人都会遵守的：
+  - 每个.t文件都会对应一个.pm文件
+  - 每个.t文件都会对应一个独立的特性
+
+
+混合的方法是最灵活的, 一个测试可以用来验证你的所有模块都是可以成功编译的, 其它的测试可以用来验证每个模块的行为是符合设计预期的.
+随着发行包变得越来越大, 测试会变得越来越复杂, 而测试文件越大就越难以维护。
+
+把大的测试文件分解成一些小的测试文件可以加快开发的速度，如果你正在为你的RobotMonkey模块加上“breathe fire”的能力，你可能只想运行t/breathe_fire.t来验证你手头上的工作。当这个特性完成过后，你可以就会运行所有的.t文件来验证是否你新加的特性导致某种Regression。
+
+
+*** 其它测试模块
+
+Test::More依靠Test::Builder作为其后端。
+Test::Builder被用于管理测试计划并定义测试输出结果的格式。
+在CPAN上存在成百上千的类似Test::More的模块，它们都使用Test::Builder作为后端，它们可以在同一个测试程序里一起协同工作。
+
+    - Test::Fatal 用于测试是否你的程序是够适当的抛出异常，类似的模块还有 Test::Exception。
+    - Test::MockObject和Test::MockModule允许你通过Mocking技术来测试复杂的接口。
+    - Test::WWW::Mechanize 用于测试网络应用程序，类似的还有Plack::Test, Plack::Test::Agent，Test::WWW::Mechnize::PSGI可以应用于没有外部网络服务器的场景。
+    - Test::DataBase 用于测试数据库，DBICx::TestDatabase和DBIx::Class用于测试数据库Schema。
+    - Test::Class 提供了另一种组织Test Suites的方式。它允许你创建测试类，每个类的方法会覆盖一个测试场景。你还可以继承该类来对该类进行重用，Curtis Poe的文章http://www.modernperlbooks.com/mt/2009/03/organizing-test-suites-with-testclass.html 对Test::Class进行了非常好的介绍。另外，Test::Routine通过使用Moose提供了类似的功能。
+    - Test::Differences 可用于测试字符串和数据结构是否相等并且很方便地显示它们的差异。类似的模块还有Test::LongString。
+    - Test::Deep用于测试嵌套的数据结构的相等性。
+    - Devel::Cover 用于分析你的测试结构并生成覆盖性报告，尽管100%的覆盖是很难达到的，但95%会远好于80%。
+
+请参看Perl QA (http://qa.perl.org) 以获取更多的关于Perl测试的信息。    
+
