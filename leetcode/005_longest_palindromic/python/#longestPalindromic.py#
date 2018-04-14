@@ -1,0 +1,64 @@
+"""
+Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+
+Example:
+
+Input: "babad"
+
+Output: "bab"
+
+Note: "aba" is also a valid answer.
+ 
+
+Example:
+
+Input: "cbbd"
+
+Output: "bb"
+"""
+
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        if self.isPal(s):
+            return s
+        reversedS = self.reverse(s)
+        matrix = [[0 for x in range(len(s) + 1)] for y in range(len(s) + 1)] 
+        for i in range(0, len(s)):
+            for j in range(0, len(s)):
+                if s[i] == reversedS[j]:
+                    matrix[i+1][j+1] = matrix[i][j] + 1
+        maxNofMatrix = 0
+        maxI = 0
+        maxJ = 0
+        palS = ""
+        length = len(s)
+        for i in range(0, length + 1):
+            for j in range(0, length + 1):
+                if matrix[i][j] > maxNofMatrix:
+                    candidate = s[i-matrix[i][j]: i]
+                    if self.isPal(candidate):
+                        maxNofMatrix = matrix[i][j]
+                        maxI = i
+                        maxJ = j
+                        palS = candidate
+        return palS
+
+    def isPal(self, s):
+        lIdx = 0
+        rIdx = len(s) -1
+        ret = True
+        while lIdx < rIdx:
+            if s[lIdx] == s[rIdx]:
+                lIdx += 1
+                rIdx -= 1
+            else:
+                ret = False
+                break
+        return ret
+    
+    def reverse(self,s):
+        return s[::-1]        
