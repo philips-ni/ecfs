@@ -1,4 +1,6 @@
-# A useful helper script to create skeleton code (inlucde unittest) for leetcode problems
+# lcMaker.py
+
+A useful helper script to create skeleton code (include unittest) for leetcode problems
 
 ```
 ➜  leetcode python lcMaker.py
