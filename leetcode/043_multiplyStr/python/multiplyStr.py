@@ -1,5 +1,6 @@
 """
-Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2, also represented as a string.
+Given two non-negative integers num1 and num2 represented as strings,
+return the product of num1 and num2, also represented as a string.
 
 Example 1:
 
@@ -14,7 +15,6 @@ class Solution(object):
     def multiply(self, num1, num2):
         product = [0] * (len(num1) + len(num2))
         pos = len(product)-1
-        
         for n1 in reversed(num1):
             tempPos = pos
             for n2 in reversed(num2):

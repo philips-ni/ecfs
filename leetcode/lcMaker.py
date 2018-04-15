@@ -7,7 +7,7 @@ def createTargetDir(dir_name):
     print "Dir %s created" % dir_name    
 
 def createSolution(target_dir, problem_name, func_name):
-    pkg_name = problem_name.split("_")[1]
+    pkg_name = "_".join(problem_name.split("_")[1:])
     src_file_name = "%s.py" % pkg_name
     test_file_name = "%s_test.py" % pkg_name
     src_file_path = "%s/%s" % (target_dir, src_file_name)
