@@ -5,5 +5,5 @@ rails new shine \
       -d postgresql
 yarn install
 bundle install
-budlle exec rails webpacker:install
+bundle exec rails webpacker:install
 foreman start
