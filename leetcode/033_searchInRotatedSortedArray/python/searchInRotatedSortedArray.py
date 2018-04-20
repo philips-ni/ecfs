@@ -1,32 +1,34 @@
-
 class Solution(object):
-    def search2(self, nums, targetN):
-        if len(nums) == 0:
-            return -1
-        else:
-            return self._search(nums, 0, len(nums) -1, targetN)
-
-    def _search(self,nums, startIdx, endIdx, targetN):
-        print "startIdx : %d" % startIdx
-        print "endIdx : %d" % endIdx        
-        if startIdx == endIdx :
-            if nums[startIdx] != targetN:
-                return -1
-            else:
-                return startIdx
-        midIdx = (startIdx + endIdx) / 2
-        print "midIdx: %d" % midIdx
-        if nums[midIdx] == targetN:
-            return midIdx
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        # Link to video https://www.youtube.com/watch?v=uufaK2uLnSI
+        """
+				
+				
+        l = 0
+        r = len(nums)-1
         
-        if (nums[midIdx] > nums[startIdx]) :
-            if  targetN > nums[startIdx] and targetN < nums[midIdx]:
-                return self._search(nums, startIdx, midIdx -1, targetN)
-            else:
-                return self._search(nums, midIdx + 1, endIdx, targetN)
-        else:
-            if  targetN > nums[midIdx] and targetN < nums[midIdx]: 
-        elif (nums[midIdx] > nums[startIdx]) and  ( targetN > nums[startIdx] and targetN < nums[midIdx]):
-
-        else:
-
+        while (l <= r):
+            mid = (l+r)/2
+            # case 1:
+            if nums[mid] == target:
+                return mid
+            
+            #case  2: (sorted right)
+            if nums[mid] <= nums[r]:
+                if target > nums[mid] and target <= nums[r]:
+                    l = mid+1
+                else:
+                    r = mid-1
+            
+            #case 3: (sorted left)
+            if nums[mid] >= nums[l]:
+                if target >= nums[l] and target < nums[mid]:
+                    r = mid-1
+                else:
+                    l = mid+1
+        
+        return -1
