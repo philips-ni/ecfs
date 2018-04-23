@@ -1,5 +1,6 @@
 <header>
-  <h1>Welcome to Shine!</h1>
+  <h1>Welcome to Shine, <%= current_user.email %>
+  </h1>
   <h2>
     We are using Rails <%= Rails.version %>
   </h2>
@@ -10,4 +11,5 @@
     <br/>
     By Fei
   </p>
+  <%= link_to "Log out", destroy_user_session_path, method: :delete %>
 </section>
