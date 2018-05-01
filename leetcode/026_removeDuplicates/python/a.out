@@ -1,0 +1,20 @@
+F
+======================================================================
+FAIL: test_removeDuplicates (__main__.TestRemoveduplicates)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "removeDuplicates_test.py", line 9, in test_removeDuplicates
+    self.assertEqual(s.removeDuplicates(l1), 2 )
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)
+lIdx : 0
+rIdx : 2
+midIdx : 1
+lIdx : 0
+rIdx : 0
+lIdx : 1
+rIdx : 2

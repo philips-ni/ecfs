@@ -1,0 +1,218 @@
+s: aabcde, len: 6
+p: c*a.*d, len: 6
+before isMatchStarNotAtEnd
+c: c
+s: aabcde
+p: a.*d
+s: aabcde, len: 6
+p: a.*d, len: 4
+s: abcde, len: 5
+p: .*d, len: 3
+before isMatchStarNotAtEnd
+c: .
+s: abcde
+p: d
+s: abcde, len: 5
+p: d, len: 1
+s: bcde, len: 4
+p: d, len: 1
+s: cde, len: 3
+p: d, len: 1
+s: de, len: 2
+p: d, len: 1
+s: e, len: 1
+p: , len: 0
+s: e, len: 1
+p: d, len: 1
+s: , len: 0
+p: d, len: 1
+s: abcd, len: 4
+p: a.d, len: 3
+s: bcd, len: 3
+p: .d, len: 2
+s: cd, len: 2
+p: d, len: 1
+s: aab, len: 3
+p: c*a*b, len: 5
+before isMatchStarNotAtEnd
+c: c
+s: aab
+p: a*b
+s: aab, len: 3
+p: a*b, len: 3
+before isMatchStarNotAtEnd
+c: a
+s: aab
+p: b
+s: aab, len: 3
+p: b, len: 1
+s: ab, len: 2
+p: b, len: 1
+s: b, len: 1
+p: b, len: 1
+s: , len: 0
+p: , len: 0
+returning 1
+s: aab, len: 3
+p: a*b, len: 3
+before isMatchStarNotAtEnd
+c: a
+s: aab
+p: b
+s: aab, len: 3
+p: b, len: 1
+s: ab, len: 2
+p: b, len: 1
+s: b, len: 1
+p: b, len: 1
+s: , len: 0
+p: , len: 0
+returning 1
+s: aa, len: 2
+p: a*, len: 2
+before isMatchStarAtEnd
+c: a
+s: aa
+s: , len: 0
+p: , len: 0
+returning 1
+s: aa, len: 2
+p: a, len: 1
+s: a, len: 1
+p: , len: 0
+s: aa, len: 2
+p: aa, len: 2
+s: a, len: 1
+p: a, len: 1
+s: , len: 0
+p: , len: 0
+returning 1
+s: aaa, len: 3
+p: aa, len: 2
+s: aa, len: 2
+p: a, len: 1
+s: a, len: 1
+p: , len: 0
+s: aa, len: 2
+p: .*, len: 2
+before isMatchStarAtEnd
+c: .
+s: aa
+s: abcd, len: 4
+p: d*, len: 2
+before isMatchStarAtEnd
+c: d
+s: abcd
+s: a, len: 1
+p: , len: 0
+s: aab, len: 3
+p: aab, len: 3
+s: ab, len: 2
+p: ab, len: 2
+s: b, len: 1
+p: b, len: 1
+s: , len: 0
+p: , len: 0
+returning 1
+s: aaaa, len: 4
+p: aaa, len: 3
+s: aaa, len: 3
+p: aa, len: 2
+s: aa, len: 2
+p: a, len: 1
+s: a, len: 1
+p: , len: 0
+s: aaa, len: 3
+p: aaaaa, len: 5
+s: aa, len: 2
+p: aaaa, len: 4
+s: a, len: 1
+p: aaa, len: 3
+s: , len: 0
+p: aa, len: 2
+s: abcd, len: 4
+p: abcd, len: 4
+s: bcd, len: 3
+p: bcd, len: 3
+s: cd, len: 2
+p: cd, len: 2
+s: d, len: 1
+p: d, len: 1
+s: , len: 0
+p: , len: 0
+returning 1
+s: aaaaaabbc, len: 9
+p: a*b*, len: 4
+before isMatchStarNotAtEnd
+c: a
+s: aaaaaabbc
+p: b*
+s: aaaaaabbc, len: 9
+p: b*, len: 2
+before isMatchStarAtEnd
+c: b
+s: aaaaaabbc
+s: aaaaabbc, len: 8
+p: b*, len: 2
+before isMatchStarAtEnd
+c: b
+s: aaaaabbc
+s: aaaabbc, len: 7
+p: b*, len: 2
+before isMatchStarAtEnd
+c: b
+s: aaaabbc
+s: aaabbc, len: 6
+p: b*, len: 2
+before isMatchStarAtEnd
+c: b
+s: aaabbc
+s: aabbc, len: 5
+p: b*, len: 2
+before isMatchStarAtEnd
+c: b
+s: aabbc
+s: abbc, len: 4
+p: b*, len: 2
+before isMatchStarAtEnd
+c: b
+s: abbc
+s: bbc, len: 3
+p: b*, len: 2
+before isMatchStarAtEnd
+c: b
+s: bbc
+s: abcd, len: 4
+p: a..d, len: 4
+s: bcd, len: 3
+p: ..d, len: 3
+s: cd, len: 2
+p: .d, len: 2
+s: d, len: 1
+p: d, len: 1
+s: , len: 0
+p: , len: 0
+returning 1
+s: aaaa, len: 4
+p: a*a, len: 3
+before isMatchStarNotAtEnd
+c: a
+s: aaaa
+p: a
+s: aaaa, len: 4
+p: a, len: 1
+s: aaa, len: 3
+p: , len: 0
+s: aaa, len: 3
+p: a, len: 1
+s: aa, len: 2
+p: , len: 0
+s: aa, len: 2
+p: a, len: 1
+s: a, len: 1
+p: , len: 0
+s: a, len: 1
+p: a, len: 1
+s: , len: 0
+p: , len: 0
+returning 1
