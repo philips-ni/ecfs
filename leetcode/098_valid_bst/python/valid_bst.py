@@ -51,7 +51,24 @@ def layeredTraversal(root):
     return visited
 
 class Solution(object):
-    def isValidBST(self, root):
+    def isValidBST(self, root, lessThan = float('inf'), largerThan = float('-inf')):
+        if not root:
+            return True
+        if root.val <= largerThan or root.val >= lessThan:
+            return False
+        return self.isValidBST(root.left, min(lessThan, root.val), largerThan) and \
+               self.isValidBST(root.right, lessThan, max(root.val, largerThan))
+    
+    def isValidBST3(self, root):
+        inorder = self.inorder(root)
+        return inorder == list(sorted(set(inorder)))
+
+    def inorder(self, root):
+        if root is None:
+            return []
+        return self.inorder(root.left) + [root.val] + self.inorder(root.right)
+    
+    def isValidBST2(self, root):
         if root is None:
             return True
 
