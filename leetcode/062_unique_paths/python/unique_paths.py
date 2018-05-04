@@ -1,6 +1,6 @@
 import pprint
 class Solution2(object):
-    def uniquePaths2(self, m, n):
+    def uniquePaths(self, m, n):
         pathCounter = [0]
         self.dfs(m,n,0,0,pathCounter)
         return pathCounter[0]
@@ -30,7 +30,7 @@ class Solution(object):
         """
         x, y represent robot position
         """
-        print store        
+        # print store        
         if x == m and y == n:
             return 1
 
@@ -42,6 +42,6 @@ class Solution(object):
 
         if y not in store[x]:
             store[x][y] = self.uniqueP(m, n, x+1, y, store) + self.uniqueP(m, n, x, y+1, store)
-        pp = pprint.PrettyPrinter(depth=6)
-        pp.pprint(store)
+        # pp = pprint.PrettyPrinter(depth=6)
+        #pp.pprint(store)
         return store[x][y]
