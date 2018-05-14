@@ -19,7 +19,7 @@ class turnpike_problem:
   
         tmpD = D[:]  
         set_right = True  
-        for i in range(1, left)+range(right+1, n+1):  
+        for i in range(1, left) + range(right+1, n+1):  
             if abs(self.x[i]-Dmax) not in tmpD:  
                 set_right = False  
                 break  
@@ -32,7 +32,7 @@ class turnpike_problem:
   
             found_flag = self.place(n, D, left, right-1)  
   
-            if found_flag == False:  
+            if found_flag == False:  # backtrack
                 for i in range(1, left)+range(right+1, n+1):  
                     D.append(abs(self.x[i]-Dmax))  
                 #D.sort()  
@@ -57,8 +57,7 @@ class turnpike_problem:
                     for i in range(1, left)+range(right+1, n+1):  
                         D.append(abs(self.x[n]-Dmax-self.x[i]))  
                     #D.sort()  
-  
-        return found_flag  
+          return found_flag  
           
     def turnpike(self, n, D):  
         self.x[n] = max(D)  
