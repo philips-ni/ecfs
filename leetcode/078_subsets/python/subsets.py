@@ -6,12 +6,13 @@ class Solution(object):
         for i in range(0, pow(2,length)):
             s = []
             for j in range(0, length):
+                # if the No. j bit is 1
                 if (i & (1 << j)) > 0 :
                     s.append(l[j])
             sets.append(s)
         return sets
         
-    def subset2s(self, l):
+    def subsets(self, l):
         # print "l: " + str(l)
         if len(l) == 0:
             return [[]]
