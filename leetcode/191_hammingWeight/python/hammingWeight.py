@@ -13,10 +13,16 @@ Output: 1
 Explanation: Integer 128 has binary representation 00000000000000000000000010000000
 """
 class Solution(object):
-    def hammingWeight(self,n):
+    def hammingWeight2(self,n):
         if n == 0:
             return 0
         if n % 2 == 1:
             return self.hammingWeight( n >> 1) + 1
         else:
             return self.hammingWeight( n >> 1)
+    def hammingWeight(self,n):
+        count = 0
+        while n != 0:
+            n = n & (n-1)
+            count += 1
+        return count
