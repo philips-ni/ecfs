@@ -19,7 +19,7 @@ Assume we are dealing with an environment which could only hold integers within 
 MAX = 2147483647
 MIN = -2147483648
 class Solution(object):
-    def reverse(self, x):
+    def reverse0(self, x):
         """
         :type x: int
         :rtype: int
@@ -43,3 +43,21 @@ class Solution(object):
             ret = 0
         return ret
                                     
+
+    def reverse(self, x):
+        isNeg = False
+        absX = x
+        if x < 0:
+            isNeg = True
+            absX = -1 * x
+        ret = 0
+        remainX = absX
+        while remainX:
+            ret = ret * 10 + remainX % 10
+            remainX //= 10
+        if isNeg:
+            ret = -1 * ret
+        if ret > MAX or ret < MIN:
+            return 0
+        else:
+            return ret
