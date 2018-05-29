@@ -117,3 +117,6 @@ x ^ (1 << i | 1 << j)
 '0b1100010'
 >>>
 ```
+
+# Reference
+  - http://graphics.stanford.edu/~seander/bithacks.html
