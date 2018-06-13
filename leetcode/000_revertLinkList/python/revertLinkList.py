@@ -22,7 +22,7 @@ def dump(head):
     print "%s" % iter.val
 
 class Solution(object):
-    def revertLinkList(self, head):
+    def revertLinkList2(self, head):
         currentNode = head
         prevNode = None
         nextNode = None
@@ -32,5 +32,15 @@ class Solution(object):
             prevNode = currentNode
             currentNode = nextNode
         return prevNode
+    
+    def revertLinkList(self, head):
+        currentNode = head
+        while currentNode.next:
+            tmpNode = currentNode.next
+            currentNode.next = tmpNode.next
+            tmpNode.next = head
+            head = tmpNode
+            # dump(head)
+        return head
             
     
