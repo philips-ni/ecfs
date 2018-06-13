@@ -23,7 +23,7 @@ def dump(head):
     print "%s" % iter.val
 
 class Solution(object):
-    def hasCycle(self, head):
+    def hasCycle2(self, head):
         fastP = head
         slowP = head
         while fastP and fastP.next:
@@ -33,10 +33,10 @@ class Solution(object):
                 return True
         return False
     
-    def hasCycle2(self, head):
+    def hasCycle(self, head):
         node = head
         from collections import defaultdict        
-        visited_dict =  defaultdict(dict)
+        visited_dict =  defaultdict(lambda: False)
         while node:
             if visited_dict[id(node)]:
                 return True
