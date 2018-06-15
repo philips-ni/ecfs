@@ -118,5 +118,18 @@ x ^ (1 << i | 1 << j)
 >>>
 ```
 
+# Check the No. i bit of a interger 1 or not
+```
+x & ( 1 << i ) > 0
+
+>>>bin(12)
+bin(12) '0b1100'
+
+12 & (1<<0) > 0 False
+12 & (1<<1) > 0 False
+12 & (1<<2) > 0 True
+12 & (1<<3) > 0 True
+
+```
 # Reference
   - http://graphics.stanford.edu/~seander/bithacks.html

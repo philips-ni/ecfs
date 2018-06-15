@@ -1,5 +1,5 @@
 
-class Solution(object):
+class Solution1(object):
     def permute(self, l):
         return self._permute(l,len(l))
                              
@@ -17,9 +17,33 @@ class Solution(object):
                 retL.append(tmpL)
         return retL
 
-                
-            
-            
-                        
-                             
-                             
+
+class Solution(object):
+    def permute(self, l):
+        permuations = []
+        if len(l) == 0:
+            return [[]]
+        curr = []
+        isVisited = [False] * len(l)
+        self.backTracking(permuations, curr, isVisited, l)
+        print("permuations: {}".format(permuations))        
+        return permuations
+    
+    def backTracking(self, permuations, curr, isVisited, l):
+        print("permuations: {}".format(permuations))
+        print("curr:{}".format(curr))
+        print("isVisited:{}".format(isVisited))
+        print("l: {}".format(l))
+        if len(curr) == len(l):
+            print("appened")
+            permuations.append(curr)
+            print("permuations: {}".format(permuations))            
+            return
+
+        for i in range(len(l)):
+            if not isVisited[i]:
+                isVisited[i] = True
+                curr.append(l[i])
+                self.backTracking(permuations, curr, isVisited, l)
+                isVisited[i] = False
+                curr.pop()                
