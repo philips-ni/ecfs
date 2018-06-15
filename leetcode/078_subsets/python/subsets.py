@@ -1,9 +1,23 @@
-
+import math
 class Solution(object):
     def subsets(self,l):
         length = len(l)
         sets = []
-        for i in range(0, pow(2,length)):
+        for i in range(1 << length):
+            bit_array = i
+            s = []
+            while bit_array:
+                tmp = bit_array & (bit_array - 1)
+                pos = int(math.log(bit_array - tmp, 2))
+                s.append(l[pos])
+                bit_array = tmp
+            sets.append(s)
+        return sets
+    
+    def subsets3(self,l):
+        length = len(l)
+        sets = []
+        for i in range(1 << length):
             s = []
             for j in range(0, length):
                 # if the No. j bit is 1
@@ -12,7 +26,7 @@ class Solution(object):
             sets.append(s)
         return sets
         
-    def subsets(self, l):
+    def subsets2(self, l):
         # print "l: " + str(l)
         if len(l) == 0:
             return [[]]
