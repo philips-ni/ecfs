@@ -4,6 +4,7 @@ class Solution(object):
             return []
         solutions = []
         self.dfs(n, [], solutions)
+        # print solutions
         return self.convert(solutions)
     
     def dfs(self,n,placed_queens,solutions):
@@ -12,10 +13,12 @@ class Solution(object):
         if length == n:
             # print "found it"
             solutions.append(placed_queens)
-            return
+            return  # backtrack
         for i in range(0,n):
             if self.isAllowed(n, i,placed_queens):
                 self.dfs(n,placed_queens + [i],solutions)
+            else:
+                pass # backtrack
 
     def isAllowed(self, n, i, placed_queens):
         length = len(placed_queens)

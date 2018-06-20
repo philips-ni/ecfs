@@ -20,24 +20,17 @@ class Solution1(object):
 
 class Solution(object):
     def permute(self, l):
-        permuations = []
         if len(l) == 0:
             return [[]]
+        permuations = []
         curr = []
         isVisited = [False] * len(l)
         self.backTracking(permuations, curr, isVisited, l)
-        print("permuations: {}".format(permuations))        
         return permuations
     
-    def backTracking(self, permuations, curr, isVisited, l):
-        print("permuations: {}".format(permuations))
-        print("curr:{}".format(curr))
-        print("isVisited:{}".format(isVisited))
-        print("l: {}".format(l))
+    def backTracking(self, permuations,  curr, isVisited, l):
         if len(curr) == len(l):
-            print("appened")
-            permuations.append(curr)
-            print("permuations: {}".format(permuations))            
+            permuations.append(curr[:])
             return
 
         for i in range(len(l)):
@@ -46,4 +39,4 @@ class Solution(object):
                 curr.append(l[i])
                 self.backTracking(permuations, curr, isVisited, l)
                 isVisited[i] = False
-                curr.pop()                
+                curr.pop()
