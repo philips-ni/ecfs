@@ -14,6 +14,7 @@ def initList(list):
         prevNode = currentNode
     return head
 
+
 def dump(head):
     iter = head
     while iter.next:
