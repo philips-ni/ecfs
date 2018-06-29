@@ -1,5 +1,45 @@
 class Solution(object):
     def solveNQueens(self, n):
+        solutions = []
+        self.dfs(solutions, [], n)
+        converted_solutions = self.convert(solutions,n)
+        return converted_solutions
+
+    def dfs(self, solutions, placed_queens, n):
+        if n == 0:
+            return
+        if len(placed_queens) == n:
+            solutions.append(placed_queens)
+        for i in range(n):
+            if self.isValidPos(i, placed_queens, n):
+                self.dfs(solutions, placed_queens + [i], n)
+        return solutions
+
+    def isValidPos(self, i, placed_queens, n):
+        for row, col in enumerate(placed_queens):
+            if i == col :
+                return False
+            if abs(len(placed_queens) - row) == abs(i - col):
+                return False
+        return True
+
+    def convert(self, solutions, n):
+        converted_solutions = []
+        for solution in solutions:
+            converted_solution = []
+            for i in solution:
+                row = ""
+                for j in range(n):
+                    if i == j:
+                        row += 'Q'
+                    else:
+                        row += '.'
+                converted_solution.append(row)
+            converted_solutions.append(converted_solution)
+        return converted_solutions
+
+class Solution1(object):
+    def solveNQueens(self, n):
         if n == 0:
             return []
         solutions = []

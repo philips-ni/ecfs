@@ -20,7 +20,7 @@ For now, the judge is able to judge based on one instance of gray code sequence.
 class Solution(object):
     def grayCode(self, n):
         if n == 0:
-            return [0]
+            return []
         if n == 1:
             return [0,1]
         tmp = self.grayCode(n-1)

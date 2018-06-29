@@ -12,30 +12,24 @@ Input: [[1,4],[4,5]]
 Output: [[1,5]]
 Explanation: Intervals [1,4] and [4,5] are considerred overlapping.
 """
-# Definition for an interval.
-class Interval(object):
-    def __init__(self, s=0, e=0):
-        self.start = s
-        self.end = e
-        
 class Solution(object):
-    def merge(self, intervals):
+    def merge2(self, intervals):
         """
         :type intervals: List[Interval]
         :rtype: List[Interval]
         """
         if not intervals:
             return []
-        intervals = sorted(intervals, key = lambda x:x.start)
+        intervals = sorted(intervals, key = lambda x:x[0])
         res = [intervals[0]]
         for interval in intervals[1:]:
-            if interval.start <= res[-1].end:
-                res[-1].end = max(res[-1].end, interval.end)
+            if interval[0] <= res[-1][1]:
+                res[-1][1] = max(res[-1][1], interval[1])
             else:
                 res.append(interval)
         return res
     
-    def merge2(self, inters):
+    def merge(self, inters):
         if len(inters) < 2:
             return inters
         merged = [inters[0]]
@@ -46,15 +40,15 @@ class Solution(object):
         if idx == len(inters):
             return
 
-        s = inters[idx].start
-        e = inters[idx].end
-        sM = merged[-1].start
-        eM = merged[-1].end
+        s = inters[idx][0]
+        e = inters[idx][1]
+        sM = merged[-1][0]
+        eM = merged[-1][1]
         if e < eM:
             pass
         elif s > eM:
             merged.append(inters[idx])
         else:
-            merged[-1].end = e
+            merged[-1][1] = e
         self._merge(inters, idx+1, merged)            
         
