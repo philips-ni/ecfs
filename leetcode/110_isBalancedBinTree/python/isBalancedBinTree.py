@@ -10,12 +10,11 @@ def setupTree(l):
         return None
     root = TreeNode(l[0])
     isLeft = True
-    idx = 1
-    q = deque([], 100)
+    q = deque()
     parentNode = root
-    while idx < len(l):
-        if l[idx]:
-            currNode = TreeNode(l[idx])
+    for i in l[1:]:
+        if i:
+            currNode = TreeNode(i)
         else:
             currNode = None
         q.append(currNode)
@@ -28,12 +27,11 @@ def setupTree(l):
             if parentNode == None:
                 parentNode = q.popleft()
             isLeft = True                
-        idx += 1
     return root
 
 
 def check(node):
-    if node == None:
+    if node is None:
         return (0, True)
     l_depth, l_balanced = check(node.left)
     r_depth, r_balanced = check(node.right)
@@ -57,7 +55,7 @@ class Solution(object):
             else:
                 node = stack[-1]
                 if not node.right or last == node.right:
-                    node = stack.pop()
+                    stack.pop()
                     left, right  = depths.get(node.left, 0), depths.get(node.right, 0)
                     if abs(left - right) > 1: return False
                     depths[node] = 1 + max(left, right)
