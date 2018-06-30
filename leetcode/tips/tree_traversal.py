@@ -84,8 +84,39 @@ def print_tree_in(root):
             current = stack.pop()
             print current.getValue()
         current = current.getRight(); 
+
+def print_tree_post(root): 
  
-def print_tree_post(root):
+    if root is None:
+        return         
+     
+    # Create two stacks 
+    s1 = []
+    s2 = []
+     
+    # Push root to first stack
+    s1.append(root)
+     
+    # Run while first stack is not empty
+    while (len(s1) >0):
+         
+        # Pop an item from s1 and append it to s2
+        node = s1.pop()
+        s2.append(node)
+     
+        # Push left and right children of removed item to s1
+        if node.left is not None:
+            s1.append(node.left)
+        if node.right is not None :
+            s1.append(node.right)
+ 
+        # Print all eleements of second stack
+    while(len(s2) > 0):
+        node = s2.pop()
+        print node.val,
+ 
+ 
+def print_tree_post1(root):
     stack = []
     current = root
     while True:
