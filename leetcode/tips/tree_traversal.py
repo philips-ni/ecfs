@@ -46,19 +46,28 @@ def print_tree_pre_r(root):
     print_tree_pre_r(root.getRight())
 
 def print_tree_pre(root):
-    stack = []
-    current = root
-    while True:
-        while current is not None:
-            print current.getValue()
-            stack.append(current)
-            current = current.getLeft();
-        if not stack:
-            return
-        current = stack.pop()
-        while current.getRight is None and stack:
-            current = stack.pop()
-        current = current.getRight();  
+    # Base CAse 
+    if root is None:
+        return
+     # create an empty stack and push root to it
+    nodeStack = []
+    nodeStack.append(root)
+    #  Pop all items one by one. Do following for every popped item
+    #   a) print it
+    #   b) push its right child
+    #   c) push its left child
+    # Note that right child is pushed first so that left
+    # is processed first */
+    while(len(nodeStack) > 0):
+         # Pop the top item from stack and print it
+        node = nodeStack.pop()
+        print node.val
+        # Push right and left children of the popped node
+        # to stack
+        if node.right is not None:
+            nodeStack.append(node.right)
+        if node.left is not None:
+            nodeStack.append(node.left)
 
 def print_tree_in(root):
     stack = []
