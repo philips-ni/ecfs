@@ -33,7 +33,7 @@ def setupTree(l):
         else:
             parentNode.right = currNode
             parentNode = q.popleft()
-            if parentNode == None:
+            while parentNode == None:
                 parentNode = q.popleft()
             isLeft = True                
     return root
@@ -50,43 +50,52 @@ def print_tree_pre(root):
     if root is None:
         return
      # create an empty stack and push root to it
-    nodeStack = []
-    nodeStack.append(root)
+    stack = []
+    stack.append(root)
     #  Pop all items one by one. Do following for every popped item
     #   a) print it
     #   b) push its right child
     #   c) push its left child
     # Note that right child is pushed first so that left
     # is processed first */
-    while(len(nodeStack) > 0):
+    while(len(stack) > 0):
          # Pop the top item from stack and print it
-        node = nodeStack.pop()
-        print node.val
+        current = stack.pop()
+        print current.val
         # Push right and left children of the popped node
         # to stack
-        if node.right is not None:
-            nodeStack.append(node.right)
-        if node.left is not None:
-            nodeStack.append(node.left)
+        if current.right is not None:
+            stack.append(current.right)
+        if current.left is not None:
+            stack.append(current.left)
 
 def print_tree_in(root):
+    """
+    1) Create an empty stack S.
+    2) Initialize current node as root
+    3) Push the current node to S and set current = current->left until current is NULL
+    4) If current is NULL and stack is not empty then 
+    a) Pop the top item from stack.
+    b) Print the popped item, set current = popped_item->right 
+    c) Go to step 3.
+    5) If current is NULL and stack is empty then we are done.
+    """
     stack = []
     current = root
-    while True:
-        while current is not None:
+    done = False
+    while not done:
+        if current is not None:
             stack.append(current)
             current = current.getLeft();
-        if not stack:
-            return
-        current = stack.pop()
-        print current.getValue()
-        while current.getRight is None and stack:
-            current = stack.pop()
-            print current.getValue()
-        current = current.getRight(); 
+        else:
+            if len(stack) > 0:
+                current = stack.pop()
+                print current.getValue()
+                current = current.getRight()
+            else:
+                done = True
 
 def print_tree_post(root): 
- 
     if root is None:
         return         
      
@@ -139,6 +148,9 @@ def print_tree_post1(root):
 
             
 root = setupTree([3,9,20,None,None,15,7])
+print_tree_in(root)
+
+"""
 print_tree_pre(root)
 print "-" * 10
 print_tree_pre_r(root)
@@ -146,3 +158,4 @@ print "-" * 10
 print_tree_in(root)
 print "-" * 10
 print_tree_post(root)
+"""
