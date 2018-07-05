@@ -3,6 +3,7 @@
  
 # system desgin
  - https://segmentfault.com/a/1190000006025876
+ - https://github.com/checkcheckzz/system-design-interview
  
 # overall
  - https://siddontang.gitbooks.io/leetcode-solution/content/
