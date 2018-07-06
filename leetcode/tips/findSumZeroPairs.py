@@ -31,5 +31,5 @@ retl = findSumZeroPairs([1,2,-1,10,0,-3,-2,5,-5,4,4,4,-4,1])
 print(retl)
 
 #  bash-3.2$ ppython findSumZeroPairs.py
-#  [(2, -2), (5, -5), (4, -4)]
+#  [(1,-1), (2, -2), (5, -5), (4, -4)]
 #
