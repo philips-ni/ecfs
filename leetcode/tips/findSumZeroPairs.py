@@ -12,15 +12,15 @@ def findSumZeroPairs(l):
     for idx, v in enumerate(l):
         val_idx_dict[v].append(idx)
     # print(val_idx_dict)
-    retl = []
+    retl = set([])
     for i in l:
         another_part = 0 - i
         if i == 0 and len(val_idx_dict[i]) < 2:
             continue
         if another_part in val_idx_dict:
             if not isIncluded(retl, (i, another_part)):
-                retl.append((i,another_part))
-    return retl
+                retl.add((i,another_part))
+    return list(retl)
 
 def isIncluded(l, pair):
     n1,n2 = pair
