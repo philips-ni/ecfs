@@ -12,7 +12,7 @@ Because nums[0] + nums[1] = 2 + 7 = 9,
 return [0, 1].
 """
 
-
+from collections import defaultdict
 class Solution(object):
     def twoSum(self, nums, target):
         """
@@ -43,12 +43,7 @@ class Solution(object):
             return []
 
     def convertToDict(self,nums):
-        nums_dict = {}
-        idx = 0
-        for n in nums:
-            if n in nums_dict:
+        nums_dict = defaultdict(list)
+        for idx,n in enumerate(nums):
                 nums_dict[n].append(idx)
-            else:
-                nums_dict[n] = [idx]                
-            idx += 1
         return nums_dict
