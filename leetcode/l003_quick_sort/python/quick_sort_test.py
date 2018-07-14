@@ -11,6 +11,11 @@ class TestQuick_Sort(unittest.TestCase):
         l = [1]
         s.quick_sort(l)
         self.assertEqual(l,[1])
+
+        l = [2,5,1,3]
+        s.quick_sort(l)
+        self.assertEqual(l,[1,2,3,5])
+        
         
 if __name__ == '__main__':
     unittest.main()
