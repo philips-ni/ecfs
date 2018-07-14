@@ -1,3 +1,4 @@
+import random
 class Solution(object):
     def quick_sort(self, l):
         if len(l) < 2:
@@ -12,14 +13,12 @@ class Solution(object):
             self._quick_sort(l,pos+1, end)
 
 
-    def partition(self, l, start, end):
-        pivot = l[start]
-        i, j = start-1, end+1
-        while True:
-            i += 1
-            j -= 1
-            while(l[i] < pivot): i+= 1
-            while(l[j] > pivot ): j-= 1
-            if i >= j: 
-                return j
-            l[i], l[j] = l[j], l[i]
+    def partition( self, l, start, end ) :
+        pivot = start + random.randrange( end - start + 1 )
+        l[pivot],l[end] = l[end], l[pivot]
+        for i in range( start, end ):
+            if l[i] <= l[end]:
+                l[i],l[start] = l[start],l[i]
+                start += 1
+        l[start],l[end] = l[end],l[start]
+        return start
