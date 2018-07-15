@@ -38,6 +38,9 @@ class Solution(object):
         hand_dict = Counter(hand)
 
         def helper(board, n, hand_dict):
+            # print "board: " + board
+            # print "n: " + str(n)
+            # print "hand_dict" + str(hand_dict)
             if len(board) == 0:
                 self.ans = min(self.ans, self.init_len_of_hand - n)
                 return
@@ -55,7 +58,7 @@ class Solution(object):
                     hand_dict[char] += 1
                 elif hand_dict[char] > 0:
                     hand_dict[char] -= 1
-                    helper(board[:i] + char + board[j:], n-1, hand_dict)
+                    helper(board[:i] + char + board[i:], n-1, hand_dict)
                     hand_dict[char] += 1
         helper(board, len(hand), hand_dict)
         return self.ans if self.ans != sys.maxint else -1
