@@ -1,4 +1,4 @@
-class Solution(object):
+class Solution1(object):
     def solveNQueens(self, n):
         solutions = []
         self.dfs(solutions, [], n)
@@ -38,7 +38,7 @@ class Solution(object):
             converted_solutions.append(converted_solution)
         return converted_solutions
 
-class Solution1(object):
+class Solution(object):
     def solveNQueens(self, n):
         if n == 0:
             return []
