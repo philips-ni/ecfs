@@ -51,42 +51,16 @@ def setupTree(l):
         idx += 1
     return root
 
-class Solution1(object):
-    def invertTree(self, root):
-        if root == None:
-            return root
-        left = self.invertTree(root.left)
-        right = self.invertTree(root.right)
-        root.right = left
-        root.left = right
-        return root
-        
-
 
 class Solution(object):
-    def invertTree(self, root):
-        """
-        :type root: TreeNode
-        :rtype: TreeNode
-        """
-        stack = []
-        stack.append(root)
-        while stack:
-            node = stack.pop(-1)
-            if node:
+    def checkEqualTree(self, root):
+        # Seen will store each subree's sum, and if found one of them is half of total then we found it
+        seen = []
+        def sum_(node):
+            if not node: return 0
+            seen.append(sum_(node.left) + sum_(node.right) + node.val)
+            return seen[-1]
 
-import unittest
-import invertBinTree
-
-class TestInvertbintree(unittest.TestCase):
-    def test_invertTree(self):
-        s = invertBinTree.Solution()
-        tree1 = invertBinTree.setupTree([4,2,7,1,3,6,9])
-        tree1 = s.invertTree(tree1)
-        self.assertEqual(tree1.convertTreeToList(), [4,7,2,9,6,3,1])
-if __name__ == '__main__':
-    unittest.main()
-                node.left, node.right = node.right, node.left
-                stack.append(node.left)
-                stack.append(node.right)
-        return root
+        total = sum_(root)
+        seen.pop()
+        return total / 2.0 in seen
